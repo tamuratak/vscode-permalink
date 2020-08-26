@@ -17,7 +17,7 @@
   "contributes": {},
   "activationEvents": [
     "onCommand:extension.helloWorld",
-    "onLanguage:typescript"
+    "onLanguage:markdown"
   ],
   "dependencies": {},
   "devDependencies": {
