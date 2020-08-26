@@ -1,0 +1,62 @@
+{
+  "name": "linktocode",
+  "displayName": "Link To Code",
+  "version": "0.1.0",
+  "publisher": "tamuratak",
+  "license": "MIT",
+  "description": "GitHub-like links to code snippets on VS Code",
+  "homepage": "https://github.com/tamuratak/vscode-linktocode",
+  "main": "./out/src/main.js",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tamuratak/vscode-linktocode.git"
+  },
+  "engines": {
+    "vscode": "^1.44.0"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "activationEvents": [
+    "onCommand:extension.helloWorld",
+    "onLanguage:typescript"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^12",
+    "@types/vscode": "^1.44.0",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "eslint": "^7.7.0",
+    "husky": "^4.2.5",
+    "mocha": "^7.1.1",
+    "typescript": "^3.9.7",
+    "vsce": "^1.79.3"
+  },
+  "files": [
+    "out/**/*",
+    "src/**/*"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "eslint --cache --ext .ts,.js ."
+    }
+  },
+  "scripts": {
+    "build": "npm run compile",
+    "compile": "tsc -p ./",
+    "clean": "rm -rf out/src/* out/test/*",
+    "lint": "eslint --cache --ext .ts .",
+    "lint:fix": "eslint --fix --ext .ts .",
+    "release": "npm run clean && npm run lint && npm run compile && vsce package",
+    "test": "mocha --ui tdd out/test/**/*.js",
+    "watch": "tsc -w -p ./"
+  }
+}
