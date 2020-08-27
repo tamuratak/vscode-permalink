@@ -20,7 +20,12 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		const snippet = arry.join('\n')
 		const md = new vscode.MarkdownString(undefined, true)
 		md.appendCodeblock(snippet, 'typescript')
-		const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({ query: JSON.stringify({snippet: md.value.trimLeft(), line: position.line + 1}) })
+		const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({
+			query: JSON.stringify({
+				snippet: md.value.trimLeft(),
+				line: position.line + 1
+			})
+		})
 		md.appendMarkdown(`[Fetch](${cmdlink})`)
 		md.isTrusted = true
 		return new vscode.Hover(md, link.range)
