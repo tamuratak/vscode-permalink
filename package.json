@@ -14,9 +14,24 @@
   "engines": {
     "vscode": "^1.44.0"
   },
-  "contributes": {},
+  "contributes": {
+    "commands": [
+      {
+        "command": "linktocode.copy-line",
+        "title": "Copy Line as Link to Code"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "linktocode.copy-line",
+          "group": "9_cutcopypaste"
+        }
+      ]
+    }
+  },
   "activationEvents": [
-    "onCommand:extension.helloWorld",
+    "onCommand:linktocode.copy-line",
     "onLanguage:markdown"
   ],
   "dependencies": {},
