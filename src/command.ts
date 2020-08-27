@@ -9,7 +9,7 @@ function relativePath(uri: vscode.Uri) {
     return path.relative(dir.uri.path, uri.path)
 }
 
-export function copyLine(editor: vscode.TextEditor) {
+export async function copyLine(editor: vscode.TextEditor) {
     const docUri = editor.document.uri
     const relPath = relativePath(docUri)
     if (!relPath) {
@@ -20,16 +20,19 @@ export function copyLine(editor: vscode.TextEditor) {
     const endLine = selection.end.line + 1
     if (startLine === endLine) {
         const link = relPath + `#L${startLine}`
-        vscode.env.clipboard.writeText(link)
+        return await vscode.env.clipboard.writeText(link)
     } else {
         const link = relPath + `#L${startLine}-${endLine}`
-        vscode.env.clipboard.writeText(link)
+        return await vscode.env.clipboard.writeText(link)
     }
 }
 
-export function pasteSnippet(snippet: string, line: number) {
+export async function pasteSnippet(snippet: string, line: number) {
     const pos = new vscode.Position(line, 0)
-    vscode.window.activeTextEditor?.edit((edit) => {
+    if (!vscode.window.activeTextEditor) {
+        return undefined
+    }
+    return await vscode.window.activeTextEditor.edit((edit) => {
         edit.insert(pos, snippet)
     })
 }

@@ -1,6 +1,5 @@
 import * as vscode from 'vscode'
 import {TextDocument, Position} from 'vscode'
-// import {encodeStr} from './util'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
