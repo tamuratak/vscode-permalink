@@ -1,46 +1,29 @@
 import * as vscode from 'vscode'
 import {TextDocument, Position} from 'vscode'
+import {getLinkAtPosition} from './link'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
 	async provideHover(document: TextDocument, position: Position) {
-		const reg = /([-_a-zA-Z0-9/\\:.]+)#L(\d+)(-(\d+))?/
-		const range = document.getWordRangeAtPosition(position, reg)
-		if (!range) {
+		const link = getLinkAtPosition(document, position)
+		if (!link) {
 			return undefined
 		}
-		const link = document.getText(range)
-		const match = reg.exec(link)
-		if (!match) {
-			return undefined
-		}
-		const filePath = match[1]
-		const start = Number(match[2]) - 1
-		const end = match[4] ? Number(match[4]) - 1 : start
-		if (!vscode.workspace.workspaceFolders) {
-			return undefined
-		}
-		let linkUri: vscode.Uri | undefined
-		for(const dir of vscode.workspace.workspaceFolders) {
-			const uri = vscode.Uri.joinPath(dir.uri, filePath)
-			try {
-				await vscode.workspace.fs.stat(uri)
-				linkUri = uri
-				break
-			} catch {}
-		}
+		const start = link.start
+		const end = link.end
+		const linkUri = await link.toUri()
 		if (!linkUri) {
 			return undefined
 		}
 		const doc = (await vscode.workspace.fs.readFile(linkUri)).toString()
-		const arry = doc.split('\n').slice(start, end + 1)
+		const arry = doc.split('\n').slice(start - 1, end)
 		const snippet = arry.join('\n')
 		const md = new vscode.MarkdownString(undefined, true)
 		md.appendCodeblock(snippet, 'typescript')
 		const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({ query: JSON.stringify({snippet: md.value.trimLeft(), line: position.line + 1}) })
-		md.appendMarkdown(`[Paste](${cmdlink})`)
+		md.appendMarkdown(`[Fetch](${cmdlink})`)
 		md.isTrusted = true
-		return new vscode.Hover(md)
+		return new vscode.Hover(md, link.range)
 	}
 
 }
