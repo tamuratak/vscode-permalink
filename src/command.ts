@@ -26,3 +26,10 @@ export function copyLine(editor: vscode.TextEditor) {
         vscode.env.clipboard.writeText(link)
     }
 }
+
+export function pasteSnippet(snippet: string, line: number) {
+    const pos = new vscode.Position(line, 0)
+    vscode.window.activeTextEditor?.edit((edit) => {
+        edit.insert(pos, snippet)
+    })
+}

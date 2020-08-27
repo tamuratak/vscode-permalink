@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import {copyLine} from './command'
+import {copyLine, pasteSnippet} from './command'
 import {HoverOnLinkProvider} from './hoverprovider'
 
 export function activate(context: vscode.ExtensionContext) {
@@ -8,6 +8,9 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.languages.registerHoverProvider({ scheme: 'file', language: 'markdown' }, new HoverOnLinkProvider()),
 		vscode.commands.registerTextEditorCommand('linktocode.copy-line', (editor) => {
 			copyLine(editor)
+		}),
+		vscode.commands.registerCommand('linktocode.paste-snippet', (obj) => {
+			pasteSnippet(obj.snippet, obj.line)
 		})
 	)
 }

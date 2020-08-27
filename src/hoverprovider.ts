@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import {TextDocument, Position} from 'vscode'
+// import {encodeStr} from './util'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
@@ -35,7 +36,11 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		const doc = (await vscode.workspace.fs.readFile(linkUri)).toString()
 		const arry = doc.split('\n').slice(start, end + 1)
 		const snippet = arry.join('\n')
-		const md = new vscode.MarkdownString('```\n' + snippet + '\n```')
+		const md = new vscode.MarkdownString(undefined, true)
+		md.appendCodeblock(snippet, 'typescript')
+		const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({ query: JSON.stringify({snippet: md.value.trimLeft(), line: position.line + 1}) })
+		md.appendMarkdown(`[Paste](${cmdlink})`)
+		md.isTrusted = true
 		return new vscode.Hover(md)
 	}
 
