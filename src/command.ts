@@ -23,3 +23,13 @@ export async function pasteSnippet(snippet: string, line: number) {
         edit.insert(pos, snippet)
     })
 }
+
+export async function replaceSnippet(snippet: string, start: number, end: number) {
+    if (!vscode.window.activeTextEditor) {
+        return undefined
+    }
+    const range = new vscode.Range(start, 0, end, 3)
+    return await vscode.window.activeTextEditor.edit((edit) => {
+        edit.replace(range, snippet)
+    })
+}

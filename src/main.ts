@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import {copyLine, pasteSnippet} from './command'
+import {copyLine, pasteSnippet, replaceSnippet} from './command'
 import {HoverOnLinkProvider} from './hoverprovider'
 
 export function activate(context: vscode.ExtensionContext) {
@@ -11,6 +11,9 @@ export function activate(context: vscode.ExtensionContext) {
 		}),
 		vscode.commands.registerCommand('linktocode.paste-snippet', (obj) => {
 			pasteSnippet(obj.snippet, obj.line)
+		}),
+		vscode.commands.registerCommand('linktocode.replace-snippet', (obj) => {
+			replaceSnippet(obj.snippet, obj.start, obj.end)
 		})
 	)
 }

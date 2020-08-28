@@ -71,7 +71,7 @@ export class LinkToCode {
     }
 }
 
-type LinkBlock = {
+export type LinkBlock = {
     link: LinkToCode,
     linkStrRange: vscode.Range,
     codeBlockRange?: vscode.Range
