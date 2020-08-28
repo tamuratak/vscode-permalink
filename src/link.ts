@@ -12,13 +12,13 @@ export class LinkToCode {
         if (!dir) {
             return undefined
         }
-        return '/' + pathMod.relative(dir.uri.path, uri.path)
+        return '/' + pathMod.posix.relative(dir.uri.path, uri.path)
     }
 
     static fromUri(uri: vscode.Uri, start: number, end: number): LinkToCode | undefined {
         const relPath = LinkToCode.relativePath(uri)
         if (!relPath) {
-            return
+            return undefined
         }
         return new LinkToCode(relPath, start, end)
     }
