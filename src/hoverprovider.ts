@@ -5,10 +5,11 @@ import {getLinkAtPosition} from './link'
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
 	async provideHover(document: TextDocument, position: Position) {
-		const link = getLinkAtPosition(document, position)
-		if (!link) {
+		const linkBlk = getLinkAtPosition(document, position)
+		if (!linkBlk) {
 			return undefined
 		}
+		const link = linkBlk.link
 		const start = link.start
 		const end = link.end
 		const linkUri = await link.toUri()
@@ -28,7 +29,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		})
 		md.appendMarkdown(`[Fetch](${cmdlink})`)
 		md.isTrusted = true
-		return new vscode.Hover(md, link.range)
+		return new vscode.Hover(md, linkBlk.range)
 	}
 
 }

@@ -1,3 +1,4 @@
+import * as pathMod from 'path'
 import * as vscode from 'vscode'
 import {TextDocument, Position} from 'vscode'
 
@@ -5,11 +6,27 @@ export const scheme = 'linktocode'
 export const reg = /linktocode:([-_~a-zA-Z0-9/\\.]+)#L(\d+)(-(\d+))?/
 
 export class LinkToCode {
+
+    private static relativePath(uri: vscode.Uri) {
+        const dir = vscode.workspace.getWorkspaceFolder(uri)
+        if (!dir) {
+            return undefined
+        }
+        return pathMod.relative(dir.uri.path, uri.path)
+    }
+
+    static fromUri(uri: vscode.Uri, start: number, end: number): LinkToCode | undefined {
+        const relPath = LinkToCode.relativePath(uri)
+        if (!relPath) {
+            return
+        }
+        return new LinkToCode(relPath, start, end)
+    }
+
     constructor(
         readonly path: string,
         readonly start: number,
-        readonly end: number,
-        readonly range: vscode.Range
+        readonly end: number
     ) {}
 
     async toUri(dir?: vscode.WorkspaceFolder): Promise<vscode.Uri | undefined> {
@@ -37,9 +54,22 @@ export class LinkToCode {
             return undefined
         }
     }
+
+    toString() {
+        if (this.start === this.end) {
+            return `${scheme}:${this.path}#L${this.start}`
+        } else {
+            return `${scheme}:${this.path}#L${this.start}-${this.end}`
+        }
+    }
 }
 
-export function getLinkAtPosition(document: TextDocument, position: Position) {
+type LinkBlock = {
+    link: LinkToCode,
+    range: vscode.Range
+}
+
+export function getLinkAtPosition(document: TextDocument, position: Position): LinkBlock | undefined {
     const range = document.getWordRangeAtPosition(position, reg)
     if (!range) {
         return undefined
@@ -52,5 +82,5 @@ export function getLinkAtPosition(document: TextDocument, position: Position) {
     const filePath = match[1]
     const start = Number(match[2]) - 1
     const end = match[4] ? Number(match[4]) - 1 : start
-    return new LinkToCode(filePath, start, end, range)
+    return { link: new LinkToCode(filePath, start, end), range }
 }
