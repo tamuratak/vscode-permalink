@@ -1,5 +1,7 @@
 import * as vscode from 'vscode'
 import * as link from './link'
+
+
 export class LinkToCodeLinkProvider implements vscode.DocumentLinkProvider {
     private readonly linkReg = new RegExp(link.reg.source, 'g')
 

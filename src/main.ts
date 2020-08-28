@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import {copyLine, pasteSnippet, replaceSnippet} from './command'
 import {HoverOnLinkProvider} from './hoverprovider'
-import {LinkToCodeLinkProvider} from './linkprovider'
+import {LinkToCodeLinkProvider} from './documentlinkprovider'
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('link to code activated')
