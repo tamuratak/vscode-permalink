@@ -83,6 +83,15 @@ export function getLinkAtPosition(document: TextDocument, position: Position): L
         return undefined
     }
     const linkStr = document.getText(linkStrRange)
+    const link = getLink(linkStr)
+    if (!link) {
+        return undefined
+    }
+    const codeBlockRange = getCodeBlock(document, position.line + 1)
+    return { link, linkStrRange, codeBlockRange }
+}
+
+export function getLink(linkStr: string): LinkToCode | undefined {
     const match = reg.exec(linkStr)
     if (!match) {
         return undefined
@@ -90,8 +99,7 @@ export function getLinkAtPosition(document: TextDocument, position: Position): L
     const filePath = match[1]
     const start = Number(match[2])
     const end = match[4] ? Number(match[4]) : start
-    const codeBlockRange = getCodeBlock(document, position.line + 1)
-    return { link: new LinkToCode(filePath, start, end), linkStrRange, codeBlockRange }
+    return new LinkToCode(filePath, start, end)
 }
 
 function getCodeBlock(document: TextDocument, line: number) {
