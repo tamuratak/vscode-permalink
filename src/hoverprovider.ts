@@ -59,7 +59,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		md.appendCodeblock(snippet, 'typescript')
 		const cmdlink = vscode.Uri.parse('command:linktocode.replace-snippet').with({
 			query: JSON.stringify({
-				snippet: md.value.trimLeft(),
+				snippet: md.value.trim(),
 				start: linkBlk.codeBlockRange.start.line,
 				end: linkBlk.codeBlockRange.end.line
 			})
