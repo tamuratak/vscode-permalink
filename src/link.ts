@@ -73,21 +73,52 @@ export class LinkToCode {
 
 type LinkBlock = {
     link: LinkToCode,
-    range: vscode.Range
+    linkStrRange: vscode.Range,
+    codeBlockRange?: vscode.Range
 }
 
 export function getLinkAtPosition(document: TextDocument, position: Position): LinkBlock | undefined {
-    const range = document.getWordRangeAtPosition(position, reg)
-    if (!range) {
+    const linkStrRange = document.getWordRangeAtPosition(position, reg)
+    if (!linkStrRange) {
         return undefined
     }
-    const link = document.getText(range)
-    const match = reg.exec(link)
+    const linkStr = document.getText(linkStrRange)
+    const match = reg.exec(linkStr)
     if (!match) {
         return undefined
     }
     const filePath = match[1]
     const start = Number(match[2])
     const end = match[4] ? Number(match[4]) : start
-    return { link: new LinkToCode(filePath, start, end), range }
+    const codeBlockRange = getCodeBlock(document, position.line + 1)
+    return { link: new LinkToCode(filePath, start, end), linkStrRange, codeBlockRange }
+}
+
+function getCodeBlock(document: TextDocument, line: number) {
+    if (line >= document.lineCount) {
+        return undefined
+    }
+    const lineText = document.lineAt(line)
+    if (!lineText.text.startsWith('```')) {
+        return undefined
+    }
+    let i: number
+    let endPos: vscode.Position | undefined
+    for (i = 1; i < 100; i++) {
+        const curLine = line + i
+        if (curLine >= document.lineCount) {
+            break
+        }
+        const s = document.lineAt(curLine).text
+        if (s.startsWith('```')){
+            endPos = new vscode.Position(curLine, 3)
+            break
+        }
+    }
+    if(!endPos) {
+        return
+    }
+    const startPos = new vscode.Position(line, 0)
+    const range = new vscode.Range(startPos, endPos)
+    return range
 }

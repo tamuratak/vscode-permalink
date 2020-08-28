@@ -29,7 +29,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		})
 		md.appendMarkdown(`[Fetch](${cmdlink})`)
 		md.isTrusted = true
-		return new vscode.Hover(md, linkBlk.range)
+		return new vscode.Hover(md, linkBlk.linkStrRange)
 	}
 
 }
