@@ -21,6 +21,14 @@
         "title": "Copy Line as Link to Code"
       }
     ],
+    "keybindings": [
+      {
+        "command": "linktocode.copy-line",
+        "key": "Shift+Ctrl+c",
+        "mac": "Shift+Cmd+c",
+        "when": "editorTextFocus"
+      }
+    ],
     "menus": {
       "editor/context": [
         {
