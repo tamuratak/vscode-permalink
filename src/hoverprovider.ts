@@ -1,11 +1,14 @@
 import * as vscode from 'vscode'
-import {TextDocument, Position} from 'vscode'
-import {getSnippet, getLinkAtPosition, LinkBlock, LinkToCode} from './link'
+import {LinkBlock} from './document'
+import {LinkToCode} from './link'
+import type {Extension} from './main'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
-	async provideHover(document: TextDocument, position: Position) {
-		const linkBlk = getLinkAtPosition(document, position)
+	constructor(private readonly extension: Extension) {}
+
+	async provideHover(document: vscode.TextDocument, position: vscode.Position) {
+		const linkBlk = this.extension.documentUtil.getLinkAtPosition(document, position)
 		if (!linkBlk) {
 			return undefined
 		}
@@ -26,9 +29,9 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		return fileUri
 	}
 
-	private async hoverForFetchCommand(linkBlk: LinkBlock, position: Position) {
+	private async hoverForFetchCommand(linkBlk: LinkBlock, position: vscode.Position) {
 		const link = linkBlk.link
-		const snippet = await getSnippet(link)
+		const snippet = await this.extension.documentUtil.getSnippet(link)
 		if (!snippet) {
 			return undefined
 		}
@@ -56,7 +59,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			return undefined
 		}
 		const link = linkBlk.link
-		const snippet = await getSnippet(link)
+		const snippet = await this.extension.documentUtil.getSnippet(link)
 		if (!snippet) {
 			return undefined
 		}
