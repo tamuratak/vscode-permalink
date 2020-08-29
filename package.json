@@ -18,31 +18,25 @@
     "commands": [
       {
         "command": "linktocode.copy-line",
-        "title": "Copy Line as Link To Code"
+        "title": "Copy Line as Link"
+      },
+      {
+        "command": "linktocode.copy-line-with-workspace",
+        "title": "Copy Line with Workspace Name"
       },
       {
         "command": "linktocode.paste-link-with-snippet",
         "title": "Paste Link wit Code Snippet"
       }
     ],
-    "keybindings": [
-      {
-        "command": "linktocode.copy-line",
-        "key": "Shift+Ctrl+c",
-        "mac": "Shift+Cmd+c",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "linktocode.paste-link-with-snippet",
-        "key": "Alt+Shift+Ctrl+v",
-        "mac": "Alt+Shift+Cmd+v",
-        "when": "editorTextFocus"
-      }
-    ],
     "menus": {
       "editor/context": [
         {
           "command": "linktocode.copy-line",
+          "group": "90_linktocode"
+        },
+        {
+          "command": "linktocode.copy-line-with-workspace",
           "group": "90_linktocode"
         },
         {

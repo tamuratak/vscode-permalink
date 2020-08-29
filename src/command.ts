@@ -5,12 +5,16 @@ export class Command {
 
     constructor(private readonly extension: Extension) {}
 
-    async copyLine(editor: vscode.TextEditor) {
+    async copyLine(editor: vscode.TextEditor, withWorkspace = false) {
         const docUri = editor.document.uri
         const selection = editor.selection
         const startLine = selection.start.line + 1
         const endLine = selection.end.character === 0 ? selection.end.line : selection.end.line + 1
-        const link = this.extension.linkFactory.fromDocUri(docUri, startLine, endLine)
+        let wsName: string | undefined
+        if (withWorkspace) {
+            wsName = vscode.workspace.getWorkspaceFolder(editor.document.uri)?.name
+        }
+        const link = this.extension.linkFactory.fromDocUri(docUri, startLine, endLine, wsName)
         if (!link) {
             return
         }
