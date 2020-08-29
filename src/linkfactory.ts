@@ -4,6 +4,7 @@ import * as link from './link'
 import {LinkToCode} from './link'
 
 export class LinkToCodeFactory {
+
     private relativePath(uri: vscode.Uri) {
         const dir = vscode.workspace.getWorkspaceFolder(uri)
         if (!dir) {
@@ -12,16 +13,13 @@ export class LinkToCodeFactory {
         return pathMod.posix.relative(dir.uri.path, uri.path)
     }
 
-    private workspace(uri: vscode.Uri) {
-        const ws = vscode.workspace.workspaceFolders?.find((dir) => dir.name === uri.authority)
-        if (ws) {
-            return ws
+    private workspaceName(uri: vscode.Uri) {
+        const name = uri.authority
+        if (name && name !== '') {
+            return name
+        } else {
+            return undefined
         }
-        if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 1) {
-            const dir = vscode.workspace.getWorkspaceFolder(uri)
-            return dir
-        }
-        return undefined
     }
 
     fromStr(linkStr: string): LinkToCode | undefined {
@@ -41,8 +39,8 @@ export class LinkToCodeFactory {
         }
         const start = Number(match[1])
         const end = match[3] ? Number(match[3]) : start
-        const ws = this.workspace(uri)
-        return new LinkToCode(filePath, start, end, ws)
+        const wsName = this.workspaceName(uri)
+        return new LinkToCode(filePath, start, end, wsName)
     }
 
     fromUri(uri: vscode.Uri, start: number, end: number): LinkToCode | undefined {
@@ -50,8 +48,8 @@ export class LinkToCodeFactory {
         if (!relPath) {
             return undefined
         }
-        const ws = this.workspace(uri)
-        return new LinkToCode(relPath, start, end, ws)
+        const wsName = this.workspaceName(uri)
+        return new LinkToCode(relPath, start, end, wsName)
     }
 
 }

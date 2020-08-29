@@ -9,7 +9,7 @@ export class LinkToCode {
         readonly path: string,
         readonly start: number,
         readonly end: number,
-        readonly workspace?: vscode.WorkspaceFolder
+        readonly workspace?: string
     ) {}
 
     get fragment(): string {
@@ -55,7 +55,7 @@ export class LinkToCode {
 
     toString() {
         if (this.workspace) {
-            return `${scheme}://${this.workspace.name}/${this.path}#${this.fragment}`
+            return `${scheme}://${this.workspace}/${this.path}#${this.fragment}`
         } else {
             return `${scheme}:///${this.path}#${this.fragment}`
         }
