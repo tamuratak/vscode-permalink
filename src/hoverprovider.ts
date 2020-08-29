@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import {LinkBlock} from './document'
+import {LinkBlock} from './documentutil'
 import {LinkToCode} from './link'
 import type {Extension} from './main'
 

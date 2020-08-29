@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import {Command} from './command'
-import {DocumentUtil} from './document'
+import {DocumentUtil} from './documentutil'
 import {HoverOnLinkProvider} from './hoverprovider'
 import {LinkToCodeLinkProvider} from './documentlinkprovider'
 import {LinkToCodeFactory} from './linkfactory'
