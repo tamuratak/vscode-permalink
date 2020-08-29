@@ -28,14 +28,24 @@ export class LinkToCode {
     }
 
     static fromStr(linkStr: string): LinkToCode | undefined {
-        const match = reg.exec(linkStr)
+        let uri: vscode.Uri
+        try {
+            uri = vscode.Uri.parse(linkStr)
+        } catch {
+            return undefined
+        }
+        if (uri.scheme !== scheme) {
+            return undefined
+        }
+        const filePath = uri.path
+        const match = /L(\d+)([-,](\d+))?/.exec(uri.fragment)
         if (!match) {
             return undefined
         }
-        const filePath = match[1]
-        const start = Number(match[2])
-        const end = match[4] ? Number(match[4]) : start
-        return new LinkToCode(filePath, start, end)
+        const start = Number(match[1])
+        const end = match[3] ? Number(match[3]) : start
+        const ws = LinkToCode.workspace(uri)
+        return new LinkToCode(filePath, start, end, ws)
     }
 
     static fromUri(uri: vscode.Uri, start: number, end: number): LinkToCode | undefined {
