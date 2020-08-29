@@ -10,7 +10,7 @@ export class Command {
         const selection = editor.selection
         const startLine = selection.start.line + 1
         const endLine = selection.end.character === 0 ? selection.end.line : selection.end.line + 1
-        const link = this.extension.linkFactory.fromUri(docUri, startLine, endLine)
+        const link = this.extension.linkFactory.fromDocUri(docUri, startLine, endLine)
         if (!link) {
             return
         }

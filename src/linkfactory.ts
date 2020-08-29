@@ -43,12 +43,12 @@ export class LinkToCodeFactory {
         return new LinkToCode(filePath, start, end, wsName)
     }
 
-    fromUri(uri: vscode.Uri, start: number, end: number): LinkToCode | undefined {
-        const relPath = this.relativePath(uri)
+    fromDocUri(docUri: vscode.Uri, start: number, end: number): LinkToCode | undefined {
+        const relPath = this.relativePath(docUri)
         if (!relPath) {
             return undefined
         }
-        const wsName = this.workspaceName(uri)
+        const wsName = this.workspaceName(docUri)
         return new LinkToCode(relPath, start, end, wsName)
     }
 
