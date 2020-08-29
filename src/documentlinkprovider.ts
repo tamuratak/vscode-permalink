@@ -17,7 +17,7 @@ export class LinkToCodeLinkProvider implements vscode.DocumentLinkProvider {
                 const linkObj = link.LinkToCode.fromStr(linkStr)
                 if (linkObj) {
                     const range = new vscode.Range(i, m.index, i, m.index + linkStr.length)
-                    const uri = await linkObj.toUri()
+                    const uri = (await linkObj.toUri())?.with({ fragment: linkObj.fragment })
                     ret.push(new vscode.DocumentLink(range, uri))
                 }
             }

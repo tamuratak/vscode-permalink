@@ -75,7 +75,14 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 				end: linkBlk.codeBlockRange.end.line
 			})
 		})
-		md.appendMarkdown(`[Update](${cmdlink})`)
+		const removeCmd = vscode.Uri.parse('command:linktocode.replace-snippet').with({
+			query: JSON.stringify({
+				snippet: '',
+				start: linkBlk.codeBlockRange.start.line,
+				end: linkBlk.codeBlockRange.end.line
+			})
+		})
+		md.appendMarkdown(`[Update](${cmdlink}) &nbsp; &nbsp; &nbsp; [Remove](${removeCmd})`)
 		md.isTrusted = true
 		return new vscode.Hover(md, linkBlk.linkStrRange)
 	}
