@@ -12,7 +12,19 @@ export class LinkToCode {
         if (!dir) {
             return undefined
         }
-        return '/' + pathMod.posix.relative(dir.uri.path, uri.path)
+        return pathMod.posix.relative(dir.uri.path, uri.path)
+    }
+
+    private static workspace(uri: vscode.Uri) {
+        const ws = vscode.workspace.workspaceFolders?.find((dir) => dir.name === uri.authority)
+        if (ws) {
+            return ws
+        }
+        if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 1) {
+            const dir = vscode.workspace.getWorkspaceFolder(uri)
+            return dir
+        }
+        return undefined
     }
 
     static fromStr(linkStr: string): LinkToCode | undefined {
@@ -31,13 +43,15 @@ export class LinkToCode {
         if (!relPath) {
             return undefined
         }
-        return new LinkToCode(relPath, start, end)
+        const ws = LinkToCode.workspace(uri)
+        return new LinkToCode(relPath, start, end, ws)
     }
 
     constructor(
         readonly path: string,
         readonly start: number,
-        readonly end: number
+        readonly end: number,
+        readonly workspace?: vscode.WorkspaceFolder
     ) {}
 
     get fragment(): string {
@@ -82,7 +96,12 @@ export class LinkToCode {
     }
 
     toString() {
-        return `${scheme}://${this.path}#${this.fragment}`
+        if (this.workspace) {
+            return `${scheme}://${this.workspace.name}/${this.path}#${this.fragment}`
+        } else {
+            return `${scheme}:///${this.path}#${this.fragment}`
+        }
+
     }
 
 }
