@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import {TextDocument, Position} from 'vscode'
-import {getLinkAtPosition, LinkBlock, LinkToCode} from './link'
+import {getSnippet, getLinkAtPosition, LinkBlock} from './link'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
@@ -16,7 +16,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			}
 		}
 		const link = linkBlk.link
-		const snippet = await this.getSnippet(link)
+		const snippet = await getSnippet(link)
 		if (!snippet) {
 			return undefined
 		}
@@ -33,25 +33,12 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		return new vscode.Hover(md, linkBlk.linkStrRange)
 	}
 
-	private async getSnippet(link: LinkToCode) {
-		const start = link.start
-		const end = link.end
-		const linkUri = await link.toUri()
-		if (!linkUri) {
-			return undefined
-		}
-		const doc = (await vscode.workspace.fs.readFile(linkUri)).toString()
-		const arry = doc.split('\n').slice(start - 1, end)
-		const snippet = arry.join('\n')
-		return snippet
-	}
-
 	private async hoveForReplaceCommand(linkBlk: LinkBlock) {
 		if (!linkBlk.codeBlockRange) {
 			return undefined
 		}
 		const link = linkBlk.link
-		const snippet = await this.getSnippet(link)
+		const snippet = await getSnippet(link)
 		if (!snippet) {
 			return undefined
 		}

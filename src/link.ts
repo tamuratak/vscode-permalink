@@ -82,6 +82,19 @@ export class LinkToCode {
     }
 }
 
+export async function getSnippet(link: LinkToCode) {
+    const start = link.start
+    const end = link.end
+    const linkUri = await link.toUri()
+    if (!linkUri) {
+        return undefined
+    }
+    const doc = (await vscode.workspace.fs.readFile(linkUri)).toString()
+    const arry = doc.split('\n').slice(start - 1, end)
+    const snippet = arry.join('\n')
+    return snippet
+}
+
 export type LinkBlock = {
     link: LinkToCode,
     linkStrRange: vscode.Range,

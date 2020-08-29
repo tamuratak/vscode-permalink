@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { LinkToCode } from './link'
+import { getSnippet, LinkToCode } from './link'
 
 
 export async function copyLine(editor: vscode.TextEditor) {
@@ -12,6 +12,30 @@ export async function copyLine(editor: vscode.TextEditor) {
         return
     }
     return await vscode.env.clipboard.writeText(link.toString())
+}
+
+export async function pasteLinkWithSnippet(editor: vscode.TextEditor) {
+    const selection = editor.selection
+    const linkStr = await vscode.env.clipboard.readText()
+    const link = LinkToCode.fromStr(linkStr)
+    if (!link) {
+        return undefined
+    }
+    const snippet = await getSnippet(link)
+    if (!snippet) {
+        return undefined
+    }
+    const md = new vscode.MarkdownString(link.toString())
+    md.appendCodeblock(snippet, 'typescript')
+    if (selection.isEmpty) {
+        return await editor.edit((edit) => {
+            edit.insert(selection.start, md.value)
+        })
+    } else {
+        return await editor.edit((edit) => {
+            edit.replace(selection, md.value)
+        })
+    }
 }
 
 export async function pasteSnippet(snippet: string, line: number) {
