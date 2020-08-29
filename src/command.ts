@@ -42,11 +42,15 @@ export class Command {
     }
 
     async pasteSnippet(snippet: string, line: number) {
-        const pos = new vscode.Position(line, 0)
-        if (!vscode.window.activeTextEditor) {
+        const editor = vscode.window.activeTextEditor
+        if (!editor) {
             return undefined
         }
-        return await vscode.window.activeTextEditor.edit((edit) => {
+        if (editor.document.lineCount <= line) {
+            snippet = '\n' + snippet
+        }
+        const pos = new vscode.Position(line, 0)
+        return await editor.edit((edit) => {
             edit.insert(pos, snippet)
         })
     }
