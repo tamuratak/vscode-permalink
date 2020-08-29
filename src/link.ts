@@ -2,8 +2,8 @@ import * as pathMod from 'path'
 import * as vscode from 'vscode'
 import {TextDocument, Position} from 'vscode'
 
-export const scheme = 'linktocode'
-export const reg = /linktocode:([-_~a-zA-Z0-9/\\.]+)#L(\d+)(-(\d+))?/
+export const scheme = 'workspace'
+export const reg = /workspace:([-_~a-zA-Z0-9/\\.]+)#L(\d+)(-(\d+))?/
 
 export class LinkToCode {
 
@@ -82,7 +82,7 @@ export class LinkToCode {
     }
 
     toString() {
-        return `${scheme}:${this.path}#${this.fragment}`
+        return `${scheme}://${this.path}#${this.fragment}`
     }
 
 }
