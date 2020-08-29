@@ -15,6 +15,17 @@ export class LinkToCode {
         return '/' + pathMod.posix.relative(dir.uri.path, uri.path)
     }
 
+    static fromStr(linkStr: string): LinkToCode | undefined {
+        const match = reg.exec(linkStr)
+        if (!match) {
+            return undefined
+        }
+        const filePath = match[1]
+        const start = Number(match[2])
+        const end = match[4] ? Number(match[4]) : start
+        return new LinkToCode(filePath, start, end)
+    }
+
     static fromUri(uri: vscode.Uri, start: number, end: number): LinkToCode | undefined {
         const relPath = LinkToCode.relativePath(uri)
         if (!relPath) {
@@ -83,23 +94,12 @@ export function getLinkAtPosition(document: TextDocument, position: Position): L
         return undefined
     }
     const linkStr = document.getText(linkStrRange)
-    const link = getLink(linkStr)
+    const link = LinkToCode.fromStr(linkStr)
     if (!link) {
         return undefined
     }
     const codeBlockRange = getCodeBlock(document, position.line + 1)
     return { link, linkStrRange, codeBlockRange }
-}
-
-export function getLink(linkStr: string): LinkToCode | undefined {
-    const match = reg.exec(linkStr)
-    if (!match) {
-        return undefined
-    }
-    const filePath = match[1]
-    const start = Number(match[2])
-    const end = match[4] ? Number(match[4]) : start
-    return new LinkToCode(filePath, start, end)
 }
 
 function getCodeBlock(document: TextDocument, line: number) {
