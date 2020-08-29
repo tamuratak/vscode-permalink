@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import {TextDocument, Position} from 'vscode'
-import {getSnippet, getLinkAtPosition, LinkBlock} from './link'
+import {getSnippet, getLinkAtPosition, LinkBlock, LinkToCode} from './link'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
@@ -15,16 +15,34 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 				return hov
 			}
 		}
+		return this.hoverForFetchCommand(linkBlk, position)
+	}
+
+	private async fileUri(link: LinkToCode) {
+		const fileUri = (await link.toUri())?.with({ fragment: link.fragment })
+		if (!fileUri) {
+			return undefined
+		}
+		return fileUri
+	}
+
+	private async hoverForFetchCommand(linkBlk: LinkBlock, position: Position) {
 		const link = linkBlk.link
 		const snippet = await getSnippet(link)
 		if (!snippet) {
 			return undefined
 		}
+		const snippetMd = new vscode.MarkdownString(undefined)
+		snippetMd.appendCodeblock(snippet, 'typescript')
+		const fileUri = await this.fileUri(link)
+		if (!fileUri) {
+			return undefined
+		}
 		const md = new vscode.MarkdownString(undefined, true)
-		md.appendCodeblock(snippet, 'typescript')
+		md.appendText(fileUri.toString() + '\n')
 		const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({
 			query: JSON.stringify({
-				snippet: md.value.trimLeft(),
+				snippet: snippetMd.value.trimLeft(),
 				line: position.line + 1
 			})
 		})
@@ -42,11 +60,17 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		if (!snippet) {
 			return undefined
 		}
+		const fileUri = await this.fileUri(link)
+		if (!fileUri) {
+			return undefined
+		}
+		const snippetMd = new vscode.MarkdownString(undefined, true)
+		snippetMd.appendCodeblock(snippet, 'typescript')
 		const md = new vscode.MarkdownString(undefined, true)
-		md.appendCodeblock(snippet, 'typescript')
+		md.appendText(fileUri.toString() + '\n')
 		const cmdlink = vscode.Uri.parse('command:linktocode.replace-snippet').with({
 			query: JSON.stringify({
-				snippet: md.value.trim(),
+				snippet: snippetMd.value.trim(),
 				start: linkBlk.codeBlockRange.start.line,
 				end: linkBlk.codeBlockRange.end.line
 			})

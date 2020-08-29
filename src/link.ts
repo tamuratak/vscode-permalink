@@ -40,6 +40,14 @@ export class LinkToCode {
         readonly end: number
     ) {}
 
+    get fragment(): string {
+        if (this.start === this.end) {
+            return `L${this.start}`
+        } else {
+            return `L${this.start}-${this.end}`
+        }
+    }
+
     async toUri(dir?: vscode.WorkspaceFolder): Promise<vscode.Uri | undefined> {
         if (dir) {
          return this.findFile(dir)
@@ -74,12 +82,9 @@ export class LinkToCode {
     }
 
     toString() {
-        if (this.start === this.end) {
-            return `${scheme}:${this.path}#L${this.start}`
-        } else {
-            return `${scheme}:${this.path}#L${this.start}-${this.end}`
-        }
+        return `${scheme}:${this.path}#${this.fragment}`
     }
+
 }
 
 export async function getSnippet(link: LinkToCode) {
