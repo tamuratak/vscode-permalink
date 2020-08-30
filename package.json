@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "publisher": "tamuratak",
   "license": "MIT",
-  "description": "GitHub-like links to code snippets on VS Code",
+  "description": "GitHub-like link to code snippet on VS Code",
   "homepage": "https://github.com/tamuratak/vscode-linktocode",
   "main": "./out/src/main.js",
   "repository": {
