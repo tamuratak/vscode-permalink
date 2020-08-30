@@ -1,6 +1,6 @@
-import * as path from 'path'
 import * as vscode from 'vscode'
 import {LinkBlock} from './documentutil'
+import {getFileExt} from './ext'
 import {LinkToCode} from './link'
 import type {Extension} from './main'
 
@@ -37,7 +37,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			return undefined
 		}
 		const snippetMd = new vscode.MarkdownString(undefined)
-		const languageId = path.posix.extname(link.path).substr(1)
+		const languageId = getFileExt(link)
 		snippetMd.appendCodeblock(snippet, languageId)
 		const fileUri = await this.fileUri(link)
 		if (!fileUri) {
@@ -70,7 +70,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			return undefined
 		}
 		const snippetMd = new vscode.MarkdownString(undefined, true)
-		const languageId = path.posix.extname(link.path).substr(1)
+		const languageId = getFileExt(link)
 		snippetMd.appendCodeblock(snippet, languageId)
 		const md = new vscode.MarkdownString(undefined, true)
 		md.appendText(fileUri.toString() + '\n')
