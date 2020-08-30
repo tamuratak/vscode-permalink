@@ -1,11 +1,23 @@
-const languageId = {
-    'typescript': ['ts', 'tsx']
+import * as path from 'path'
+import * as vscode from 'vscode'
+import {languageIds} from './languageiddata'
+import type {LinkToCode} from './link'
+
+export function getLanguageId(ext: string) {
+    for (const obj of languageIds) {
+        if (obj.extensions?.includes(ext)) {
+            return obj.id
+        }
+    }
+    return undefined
 }
 
-const languageIdMap: Map<string, string> = new Map()
+export function getLanguageIdFromUri(uri: vscode.Uri) {
+    const ext = path.posix.extname(uri.path)
+    return getLanguageId(ext)
+}
 
-for(const [langName, arry] of Object.entries(languageId)) {
-    for(const langExt of arry) {
-        languageIdMap.set(langExt, langName)
-    }
+export function getLanguageIdFromLink(link: LinkToCode) {
+    const ext = path.posix.extname(link.path)
+    return getLanguageId(ext)
 }

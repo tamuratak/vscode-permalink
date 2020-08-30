@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import {LinkBlock} from './documentutil'
 import {LinkToCode} from './link'
 import type {Extension} from './main'
+import { getLanguageIdFromLink } from './languageid'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
@@ -36,7 +37,8 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			return undefined
 		}
 		const snippetMd = new vscode.MarkdownString(undefined)
-		snippetMd.appendCodeblock(snippet, 'typescript')
+		const languageId = getLanguageIdFromLink(link)
+		snippetMd.appendCodeblock(snippet, languageId)
 		const fileUri = await this.fileUri(link)
 		if (!fileUri) {
 			return undefined
@@ -68,7 +70,8 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			return undefined
 		}
 		const snippetMd = new vscode.MarkdownString(undefined, true)
-		snippetMd.appendCodeblock(snippet, 'typescript')
+		const languageId = getLanguageIdFromLink(link)
+		snippetMd.appendCodeblock(snippet, languageId)
 		const md = new vscode.MarkdownString(undefined, true)
 		md.appendText(fileUri.toString() + '\n')
 		const cmdlink = vscode.Uri.parse('command:linktocode.replace-snippet').with({

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import type {Extension} from './main'
+import { getLanguageIdFromLink } from './languageid'
 
 export class Command {
 
@@ -33,7 +34,8 @@ export class Command {
             return undefined
         }
         const md = new vscode.MarkdownString(link.toString())
-        md.appendCodeblock(snippet, 'typescript')
+        const languageId = getLanguageIdFromLink(link)
+        md.appendCodeblock(snippet, languageId)
         if (selection.isEmpty) {
             return await editor.edit((edit) => {
                 edit.insert(selection.start, md.value)
