@@ -1,0 +1,16 @@
+.vscode/
+.vscode-test/
+out/dev/
+out/test/
+test/
+src/
+sample/
+types/
+viewer/**/*.ts
+**/*.map
+.devcontainer/
+.github/
+.gitignore
+tsconfig.json
+.eslintcache
+.eslintignore
