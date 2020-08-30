@@ -63,7 +63,7 @@ export class Command {
         if (!vscode.window.activeTextEditor) {
             return undefined
         }
-        const range = new vscode.Range(start, 0, end, 3)
+        const range = new vscode.Range(start, 0, end + 1, 0)
         return await vscode.window.activeTextEditor.edit((edit) => {
             edit.replace(range, snippet)
         })
