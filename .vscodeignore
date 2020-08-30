@@ -6,8 +6,7 @@ test/
 src/
 sample/
 types/
-viewer/**/*.ts
-**/*.map
+out/**/*.map
 .devcontainer/
 .github/
 .gitignore
