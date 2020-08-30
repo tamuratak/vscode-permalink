@@ -33,12 +33,13 @@ export class LinkToCodeFactory {
             return undefined
         }
         const filePath = uri.path
+        let start: number | undefined
+        let end: number | undefined
         const match = /L(\d+)([-,](\d+))?/.exec(uri.fragment)
-        if (!match) {
-            return undefined
+        if (match) {
+            start = Number(match[1])
+            end = match[3] ? Number(match[3]) : start
         }
-        const start = Number(match[1])
-        const end = match[3] ? Number(match[3]) : start
         const wsName = this.workspaceName(uri)
         return new LinkToCode(filePath, start, end, wsName)
     }

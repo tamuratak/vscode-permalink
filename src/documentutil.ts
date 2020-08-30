@@ -16,6 +16,9 @@ export class DocumentUtil {
     async getSnippet(link: LinkToCode) {
         const start = link.start
         const end = link.end
+        if (start === undefined || end === undefined) {
+            return undefined
+        }
         const linkUri = await link.toUri()
         if (!linkUri) {
             return undefined
