@@ -1,6 +1,7 @@
+import * as path from 'path'
 import * as vscode from 'vscode'
 import type {Extension} from './main'
-import { getLanguageIdFromLink } from './languageid'
+
 
 export class Command {
 
@@ -34,7 +35,7 @@ export class Command {
             return undefined
         }
         const md = new vscode.MarkdownString(link.toString())
-        const languageId = getLanguageIdFromLink(link)
+        const languageId = path.posix.extname(link.path).substr(1)
         md.appendCodeblock(snippet, languageId)
         if (selection.isEmpty) {
             return await editor.edit((edit) => {
