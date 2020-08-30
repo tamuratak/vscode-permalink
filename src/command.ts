@@ -9,7 +9,7 @@ export class Command {
         const docUri = editor.document.uri
         const selection = editor.selection
         const startLine = selection.start.line + 1
-        const endLine = selection.end.character === 0 ? selection.end.line : selection.end.line + 1
+        const endLine = selection.isEmpty ? startLine : selection.end.line + 1
         let wsName: string | undefined
         if (withWorkspace) {
             wsName = vscode.workspace.getWorkspaceFolder(editor.document.uri)?.name

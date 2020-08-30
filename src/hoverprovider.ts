@@ -32,7 +32,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 	private async hoverForFetchCommand(linkBlk: LinkBlock, position: vscode.Position) {
 		const link = linkBlk.link
 		const snippet = await this.extension.documentUtil.getSnippet(link)
-		if (!snippet) {
+		if (snippet === undefined) {
 			return undefined
 		}
 		const snippetMd = new vscode.MarkdownString(undefined)
