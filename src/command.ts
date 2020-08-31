@@ -2,6 +2,16 @@ import * as vscode from 'vscode'
 import {getFileExt} from './ext'
 import type {Extension} from './main'
 
+export type PasteSnippetArgs = {
+    uri: string,
+    targetLine: number
+}
+
+export type ReplaceSnippetArgs = {
+    uri: string,
+    targetRange: vscode.Range
+}
+
 export class Command {
 
     constructor(private readonly extension: Extension) {}
