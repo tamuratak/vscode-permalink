@@ -29,6 +29,10 @@ export class LinkToCodeFactory {
         } catch {
             return undefined
         }
+        return this.fromUri(uri)
+    }
+
+    fromUri(uri: vscode.Uri): LinkToCode | undefined {
         if (uri.scheme !== link.scheme) {
             return undefined
         }
@@ -44,7 +48,8 @@ export class LinkToCodeFactory {
         return new LinkToCode(filePath, start, end, wsName)
     }
 
-    fromDocUri(docUri: vscode.Uri, start: number, end: number, wsName?: string): LinkToCode | undefined {
+    fromDoc(doc: vscode.TextDocument, start: number, end: number, wsName?: string): LinkToCode | undefined {
+        const docUri = doc.uri
         const relPath = this.relativePath(docUri)
         if (!relPath) {
             return undefined
