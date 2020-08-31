@@ -3,12 +3,12 @@ import {getFileExt} from './ext'
 import type {Extension} from './main'
 
 export type PasteSnippetArgs = {
-    uri: string,
+    uri: vscode.Uri,
     targetLine: number
 }
 
 export type ReplaceSnippetArgs = {
-    uri: string,
+    uri: vscode.Uri,
     targetRange: vscode.Range
 }
 
