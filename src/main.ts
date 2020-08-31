@@ -4,6 +4,7 @@ import {DocumentUtil} from './documentutil'
 import {HoverOnLinkProvider} from './hoverprovider'
 import {LinkToCodeLinkProvider} from './documentlinkprovider'
 import {LinkToCodeFactory} from './linkfactory'
+import {LinkResolver} from './linkresolver'
 
 export function activate(context: vscode.ExtensionContext) {
 	const extension = new Extension()
@@ -31,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 export class Extension {
 	readonly linkFactory: LinkToCodeFactory
+	readonly linkResolver: LinkResolver
 	readonly command: Command
 	readonly documentUtil: DocumentUtil
 
@@ -38,5 +40,6 @@ export class Extension {
 		this.command = new Command(this)
 		this.documentUtil = new DocumentUtil(this)
 		this.linkFactory = new LinkToCodeFactory()
+		this.linkResolver = new LinkResolver()
 	}
 }
