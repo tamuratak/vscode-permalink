@@ -3,6 +3,7 @@ import {Command} from './command'
 import {DocumentUtil} from './documentutil'
 import {HoverOnLinkProvider} from './hoverprovider'
 import {LinkToCodeLinkProvider} from './documentlinkprovider'
+import {Fetcher} from './fetcher'
 import {LinkToCodeFactory} from './linkfactory'
 import {LinkResolver} from './linkresolver'
 
@@ -35,10 +36,12 @@ export class Extension {
 	readonly linkResolver: LinkResolver
 	readonly command: Command
 	readonly documentUtil: DocumentUtil
+	readonly fetcher: Fetcher
 
 	constructor() {
 		this.command = new Command(this)
 		this.documentUtil = new DocumentUtil(this)
+		this.fetcher = new Fetcher(this)
 		this.linkFactory = new LinkToCodeFactory()
 		this.linkResolver = new LinkResolver()
 	}

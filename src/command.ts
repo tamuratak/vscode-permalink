@@ -29,7 +29,7 @@ export class Command {
         if (!link) {
             return undefined
         }
-        const snippet = await this.extension.documentUtil.getSnippet(link)
+        const snippet = await this.extension.fetcher.getSnippet(link)
         if (!snippet) {
             return undefined
         }
