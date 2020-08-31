@@ -3,7 +3,7 @@ import type {LinkToCode} from './link'
 
 export class LinkResolver {
 
-    async toUri(link: LinkToCode, dir?: vscode.WorkspaceFolder): Promise<vscode.Uri | undefined> {
+    async resolveLink(link: LinkToCode, dir?: vscode.WorkspaceFolder): Promise<vscode.Uri | undefined> {
         if (dir) {
          return this.findFile(link, dir)
         }

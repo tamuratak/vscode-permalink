@@ -19,7 +19,7 @@ export class DocumentUtil {
         if (start === undefined || end === undefined) {
             return undefined
         }
-        const linkUri = await this.extension.linkResolver.toUri(link)
+        const linkUri = await this.extension.linkResolver.resolveLink(link)
         if (!linkUri) {
             return undefined
         }

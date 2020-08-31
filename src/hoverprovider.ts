@@ -23,7 +23,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 	}
 
 	private async fileUri(link: LinkToCode) {
-		const uriObj = await this.extension.linkResolver.toUri(link)
+		const uriObj = await this.extension.linkResolver.resolveLink(link)
 		const fileUri = uriObj?.with({ fragment: link.fragment })
 		if (!fileUri) {
 			return undefined
