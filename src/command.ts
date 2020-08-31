@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import {getFileExt} from './ext'
+import {getFileExt} from './fileext'
 import type {Extension} from './main'
 
 export type PasteSnippetArgs = {

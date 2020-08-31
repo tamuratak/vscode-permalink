@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import {LinkBlock} from './documentutil'
-import {getFileExt} from './ext'
+import {getFileExt} from './fileext'
 import {LinkToCode} from './link'
 import type {Extension} from './main'
 
