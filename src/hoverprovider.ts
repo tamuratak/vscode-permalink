@@ -44,7 +44,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			return undefined
 		}
 		const md = new vscode.MarkdownString(undefined, true)
-		md.appendText(fileUri.toString() + '\n')
+		md.appendCodeblock(fileUri.toString() + '\n')
 		const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({
 			query: JSON.stringify({
 				snippet: snippetMd.value.trimLeft(),
