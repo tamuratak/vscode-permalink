@@ -33,28 +33,34 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 
 	private async hoverForFetchCommand(linkBlk: LinkBlock, position: vscode.Position) {
 		const link = linkBlk.link
-		const snippet = await this.extension.fetcher.getSnippet(link)
-		if (snippet === undefined) {
-			return undefined
-		}
-		const snippetMd = new vscode.MarkdownString(undefined)
-		const languageId = getFileExt(link)
-		snippetMd.appendCodeblock(snippet, languageId)
 		const fileUri = await this.fileUri(link)
 		if (!fileUri) {
 			return undefined
 		}
+		const cmdlink = await this.commandLinkToFetch(linkBlk, position)
+		if (!cmdlink) {
+			return undefined
+		}
 		const md = new vscode.MarkdownString(undefined, true)
 		md.appendCodeblock(fileUri.toString() + '\n')
+		md.appendMarkdown(`[Fetch](${cmdlink})`)
+		md.isTrusted = true
+		return new vscode.Hover(md, linkBlk.linkStrRange)
+	}
+
+	private async commandLinkToFetch(linkBlk: LinkBlock, position: vscode.Position): Promise<vscode.Uri | undefined> {
+		const link = linkBlk.link
+		const snippetMd = await this.extension.snippetFactory.createMarkdown(link)
+		if (snippetMd === undefined) {
+			return undefined
+		}
 		const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({
 			query: JSON.stringify({
 				snippet: snippetMd.value.trimLeft(),
 				line: position.line + 1
 			})
 		})
-		md.appendMarkdown(`[Fetch](${cmdlink})`)
-		md.isTrusted = true
-		return new vscode.Hover(md, linkBlk.linkStrRange)
+		return cmdlink
 	}
 
 	private async hoveForReplaceCommand(linkBlk: LinkBlock) {

@@ -6,6 +6,7 @@ import {LinkToCodeLinkProvider} from './documentlinkprovider'
 import {Fetcher} from './fetcher'
 import {LinkToCodeFactory} from './linkfactory'
 import {LinkResolver} from './linkresolver'
+import {SnippetFactory} from './snippet'
 
 export function activate(context: vscode.ExtensionContext) {
 	const extension = new Extension()
@@ -37,6 +38,7 @@ export class Extension {
 	readonly command: Command
 	readonly documentUtil: DocumentUtil
 	readonly fetcher: Fetcher
+	readonly snippetFactory: SnippetFactory
 
 	constructor() {
 		this.command = new Command(this)
@@ -44,5 +46,7 @@ export class Extension {
 		this.fetcher = new Fetcher(this)
 		this.linkFactory = new LinkToCodeFactory()
 		this.linkResolver = new LinkResolver()
+		this.snippetFactory = new SnippetFactory(this)
 	}
+
 }
