@@ -3,7 +3,7 @@ export const scheme = 'workspace'
 export const reg = /workspace:([-_~a-zA-Z0-9/\\.]+)(?:#L(\d+)(-(\d+))?)?/
 
 export class LinkToCode {
-    readonly target?: {
+    readonly targetCode?: {
         readonly start: number,
         readonly end: number
     }
@@ -16,18 +16,18 @@ export class LinkToCode {
     ) {
         if (start !== undefined) {
             if (end !== undefined) {
-                this.target = { start, end }
+                this.targetCode = { start, end }
             } else {
-                this.target = { start, end: start }
+                this.targetCode = { start, end: start }
             }
         }
     }
 
     get fragment(): string {
-        if (!this.target) {
+        if (!this.targetCode) {
             return ''
         }
-        const {start, end} = this.target
+        const {start, end} = this.targetCode
         if (start === end) {
             return `L${start}`
         } else {
