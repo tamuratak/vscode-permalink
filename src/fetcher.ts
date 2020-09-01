@@ -1,22 +1,18 @@
 import * as vscode from 'vscode'
 import {LinkToCode} from './link'
 import type {Extension} from './main'
+import type {FetcherTarget} from './types'
 
 export class Fetcher {
 
     constructor(private readonly extension: Extension) {}
 
     async getSnippet(link: LinkToCode): Promise<string | undefined> {
-        const start = link.start
-        const end = link.end
-        if (start === undefined || end === undefined) {
+        const target = await this.extension.linkResolver.resolveFetcherTarget(link)
+        if (!target) {
             return undefined
         }
-        const linkUri = await this.extension.linkResolver.resolveLink(link)
-        if (!linkUri) {
-            return undefined
-        }
-        return this.getSnippetFromUri(linkUri, start, end)
+        return this.getSnippetFromUri(target)
     }
 
     /**
@@ -25,9 +21,9 @@ export class Fetcher {
      * @param start one base
      * @param end one base
      */
-    async getSnippetFromUri(linkUri: vscode.Uri, start: number, end: number): Promise<string> {
-        const doc = (await vscode.workspace.fs.readFile(linkUri)).toString()
-        const arry = doc.split('\n').slice(start - 1, end)
+    async getSnippetFromUri(target: FetcherTarget): Promise<string> {
+        const doc = (await vscode.workspace.fs.readFile(target.uri)).toString()
+        const arry = doc.split('\n').slice(target.start - 1, target.end)
         const snippet = arry.join('\n')
         return snippet
     }
