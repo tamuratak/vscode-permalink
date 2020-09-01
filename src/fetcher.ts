@@ -15,12 +15,6 @@ export class Fetcher {
         return this.getSnippetFromUri(target)
     }
 
-    /**
-     *
-     * @param linkUri
-     * @param start one base
-     * @param end one base
-     */
     async getSnippetFromUri(target: FetcherTarget): Promise<string> {
         const doc = (await vscode.workspace.fs.readFile(target.uri)).toString()
         const arry = doc.split('\n').slice(target.start - 1, target.end)
