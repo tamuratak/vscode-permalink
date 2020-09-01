@@ -5,7 +5,7 @@ import type {FetcherTarget} from './types'
 export class LinkResolver {
 
     async resolveFetcherTarget(link: LinkToCode, dir?: vscode.WorkspaceFolder): Promise<FetcherTarget | undefined> {
-        if (link.start === undefined || link.end === undefined) {
+        if (!link.target) {
             return undefined
         }
         const linkUri = await this.resolveLink(link, dir)
@@ -14,8 +14,8 @@ export class LinkResolver {
         }
         return {
             uri: linkUri,
-            start: link.start,
-            end: link.end
+            start: link.target.start,
+            end: link.target.end
         }
     }
 
