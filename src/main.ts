@@ -8,7 +8,6 @@ import {LinkToCodeFactory} from './linkfactory'
 import {LinkResolver} from './linkresolver'
 import {SnippetFactory} from './snippet'
 import type {SnippetArgs} from './types'
-import {copyRange} from './utils'
 
 export function activate(context: vscode.ExtensionContext) {
 	const extension = new Extension()
@@ -26,7 +25,6 @@ export function activate(context: vscode.ExtensionContext) {
 			extension.command.pasteLinkWithSnippet(editor)
 		}),
 		vscode.commands.registerCommand('linktocode.paste-snippet', (obj: SnippetArgs) => {
-			obj.targetRange = copyRange(obj.targetRange)
 			extension.command.pasteSnippet(obj)
 		}),
 		vscode.commands.registerCommand('linktocode.replace-snippet', (obj) => {
