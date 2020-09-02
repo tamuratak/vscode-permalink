@@ -12,5 +12,8 @@ export type SnippetArgs = {
         start: number,
         end: number
     },
-    targetRange: vscode.Range
+    targetRange: {
+        start: { line: number, character: number },
+        end: { line: number, character: number }
+    }
 }

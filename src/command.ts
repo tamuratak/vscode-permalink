@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import {getFileExt} from './fileext'
 import type {Extension} from './main'
+import type {FetcherTarget, SnippetArgs} from './types'
 
 export type PasteSnippetArgs = {
     uri: vscode.Uri,
@@ -57,15 +58,21 @@ export class Command {
         }
     }
 
-    async pasteSnippet(snippet: string, line: number) {
+    async pasteSnippet(args: SnippetArgs) {
         const editor = vscode.window.activeTextEditor
         if (!editor) {
             return undefined
         }
-        if (editor.document.lineCount <= line) {
+        const target: FetcherTarget = {
+            uri:  vscode.Uri.parse(args.resource.uri),
+            start: args.resource.start,
+            end: args.resource.end
+        }
+        let snippet = (await this.extension.snippetFactory.createMarkdown(target)).value.trimLeft()
+        if (editor.document.lineCount <= args.targetRange.start.line) {
             snippet = '\n' + snippet
         }
-        const pos = new vscode.Position(line, 0)
+        const pos = new vscode.Position(args.targetRange.start.line, 0)
         return await editor.edit((edit) => {
             edit.insert(pos, snippet)
         })

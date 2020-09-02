@@ -3,6 +3,7 @@ import {LinkBlock} from './documentutil'
 import {getFileExt} from './fileext'
 import {LinkToCode} from './link'
 import type {Extension} from './main'
+import type {SnippetArgs} from './types'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
@@ -50,15 +51,26 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 
 	private async commandLinkToFetch(linkBlk: LinkBlock, position: vscode.Position): Promise<vscode.Uri | undefined> {
 		const link = linkBlk.link
-		const snippetMd = await this.extension.snippetFactory.createMarkdown(link)
-		if (snippetMd === undefined) {
+		const uriObj = await this.extension.linkResolver.resolveLink(link)
+		if (uriObj === undefined) {
 			return undefined
 		}
+		if (!link.targetCode) {
+			return undefined
+		}
+		const uri = uriObj.toString()
+		const {start, end} = link.targetCode
+		const args: SnippetArgs = {
+			resource: {
+				uri, start, end
+			},
+			targetRange: {
+				start: { line: position.line + 1, character: 0 },
+				end: { line: position.line + 1, character: 0 }
+			}
+		}
 		const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({
-			query: JSON.stringify({
-				snippet: snippetMd.value.trimLeft(),
-				line: position.line + 1
-			})
+			query: JSON.stringify(args)
 		})
 		return cmdlink
 	}
