@@ -93,13 +93,10 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		snippetMd.appendCodeblock(snippet, languageId)
 		const md = new vscode.MarkdownString(undefined, true)
 		md.appendText(fileUri.toString() + '\n')
-		const cmdlink = vscode.Uri.parse('command:linktocode.replace-snippet').with({
-			query: JSON.stringify({
-				snippet: snippetMd.value.trim(),
-				start: linkBlk.codeBlockRange.start.line,
-				end: linkBlk.codeBlockRange.end.line
-			})
-		})
+		const cmdlink = await this.commandLinkToReplace(linkBlk)
+		if (!cmdlink) {
+			return undefined
+		}
 		const removeCmd = vscode.Uri.parse('command:linktocode.replace-snippet').with({
 			query: JSON.stringify({
 				snippet: '',
@@ -111,4 +108,34 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		md.isTrusted = true
 		return new vscode.Hover(md, linkBlk.linkStrRange)
 	}
+
+	private async commandLinkToReplace(linkBlk: LinkBlock): Promise<vscode.Uri | undefined> {
+		if (!linkBlk.codeBlockRange) {
+			return undefined
+		}
+		const link = linkBlk.link
+		const uriObj = await this.extension.linkResolver.resolveLink(link)
+		if (uriObj === undefined) {
+			return undefined
+		}
+		if (!link.targetCode) {
+			return undefined
+		}
+		const uri = uriObj.toString()
+		const {start, end} = link.targetCode
+		const args: SnippetArgs = {
+			resource: {
+				uri, start, end
+			},
+			targetRange: {
+				start: { line: linkBlk.codeBlockRange.start.line, character: 0 },
+				end: { line: linkBlk.codeBlockRange.end.line, character: 3 }
+			}
+		}
+		const cmdlink = vscode.Uri.parse('command:linktocode.replace-snippet').with({
+			query: JSON.stringify(args)
+		})
+		return cmdlink
+	}
+
 }

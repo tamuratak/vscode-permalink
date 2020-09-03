@@ -27,8 +27,8 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('linktocode.paste-snippet', (obj: SnippetArgs) => {
 			extension.command.pasteSnippet(obj)
 		}),
-		vscode.commands.registerCommand('linktocode.replace-snippet', (obj) => {
-			extension.command.replaceSnippet(obj.snippet, obj.start, obj.end)
+		vscode.commands.registerCommand('linktocode.replace-snippet', (obj: SnippetArgs) => {
+			extension.command.replaceSnippet(obj)
 		})
 	)
 }

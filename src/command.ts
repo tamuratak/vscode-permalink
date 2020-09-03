@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import {getFileExt} from './fileext'
 import type {Extension} from './main'
 import type {FetcherTarget, SnippetArgs} from './types'
+import * as utils from './utils'
 
 export type PasteSnippetArgs = {
     uri: vscode.Uri,
@@ -63,12 +64,12 @@ export class Command {
         if (!editor) {
             return undefined
         }
-        const target: FetcherTarget = {
+        const snippeResource: FetcherTarget = {
             uri:  vscode.Uri.parse(args.resource.uri),
             start: args.resource.start,
             end: args.resource.end
         }
-        let snippet = (await this.extension.snippetFactory.createMarkdown(target)).value.trimLeft()
+        let snippet = (await this.extension.snippetFactory.createMarkdown(snippeResource)).value.trimLeft()
         if (editor.document.lineCount <= args.targetRange.start.line) {
             snippet = '\n' + snippet
         }
@@ -78,11 +79,17 @@ export class Command {
         })
     }
 
-    async replaceSnippet(snippet: string, start: number, end: number) {
+    async replaceSnippet(args: SnippetArgs) {
         if (!vscode.window.activeTextEditor) {
             return undefined
         }
-        const range = new vscode.Range(start, 0, end + 1, 0)
+        const snippeResource: FetcherTarget = {
+            uri:  vscode.Uri.parse(args.resource.uri),
+            start: args.resource.start,
+            end: args.resource.end
+        }
+        const snippet = (await this.extension.snippetFactory.createMarkdown(snippeResource)).value.trim()
+        const range = utils.copyRange(args.targetRange)
         return await vscode.window.activeTextEditor.edit((edit) => {
             edit.replace(range, snippet)
         })
