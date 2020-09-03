@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import {getFileExt} from './fileext'
 import type {Extension} from './main'
-import type {FetcherTarget, SnippetArgs} from './types'
+import type {SnippetResource, SnippetArgs} from './types'
 import * as utils from './utils'
 
 export class Command {
@@ -54,7 +54,7 @@ export class Command {
         if (!editor) {
             return undefined
         }
-        const snippeResource: FetcherTarget = {
+        const snippeResource: SnippetResource = {
             uri:  vscode.Uri.parse(args.resource.uri),
             start: args.resource.start,
             end: args.resource.end
@@ -73,7 +73,7 @@ export class Command {
         if (!vscode.window.activeTextEditor) {
             return undefined
         }
-        const snippeResource: FetcherTarget = {
+        const snippeResource: SnippetResource = {
             uri:  vscode.Uri.parse(args.resource.uri),
             start: args.resource.start,
             end: args.resource.end

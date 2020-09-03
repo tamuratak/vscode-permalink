@@ -1,10 +1,10 @@
 import * as vscode from 'vscode'
 import type {LinkToCode} from './link'
-import type {FetcherTarget} from './types'
+import type {SnippetResource} from './types'
 
 export class LinkResolver {
 
-    async resolveFetcherTarget(link: LinkToCode, dir?: vscode.WorkspaceFolder): Promise<FetcherTarget | undefined> {
+    async resolveSnippetResource(link: LinkToCode, dir?: vscode.WorkspaceFolder): Promise<SnippetResource | undefined> {
         if (!link.targetCode) {
             return undefined
         }

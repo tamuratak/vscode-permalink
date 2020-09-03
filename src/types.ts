@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-export type FetcherTarget = {
+export type SnippetResource = {
     uri: vscode.Uri,
     start: number,
     end: number

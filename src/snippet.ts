@@ -1,16 +1,16 @@
 import * as vscode from 'vscode'
 import {getFileExt} from './fileext'
 import type {Extension} from './main'
-import type {FetcherTarget} from './types'
+import type {SnippetResource} from './types'
 
 export class SnippetFactory {
 
     constructor(private readonly extension: Extension) {}
 
-    async createMarkdown(target: FetcherTarget) {
-        const snippet = await this.extension.fetcher.getSnippetFromUri(target)
+    async createMarkdown(resource: SnippetResource) {
+        const snippet = await this.extension.fetcher.getSnippetFromUri(resource)
         const snippetMd = new vscode.MarkdownString(undefined)
-        const languageId = getFileExt(target.uri)
+        const languageId = getFileExt(resource.uri)
         snippetMd.appendCodeblock(snippet, languageId)
         return snippetMd
     }

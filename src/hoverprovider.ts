@@ -1,6 +1,5 @@
 import * as vscode from 'vscode'
 import {LinkBlock} from './documentutil'
-import {getFileExt} from './fileext'
 import {LinkToCode} from './link'
 import type {Extension} from './main'
 import type {SnippetArgs} from './types'
@@ -80,19 +79,10 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			return undefined
 		}
 		const link = linkBlk.link
-		const snippet = await this.extension.fetcher.getSnippet(link)
-		if (!snippet) {
-			return undefined
-		}
 		const fileUri = await this.fileUri(link)
 		if (!fileUri) {
 			return undefined
 		}
-		const snippetMd = new vscode.MarkdownString(undefined, true)
-		const languageId = getFileExt(link)
-		snippetMd.appendCodeblock(snippet, languageId)
-		const md = new vscode.MarkdownString(undefined, true)
-		md.appendText(fileUri.toString() + '\n')
 		const cmdlink = await this.commandLinkToReplace(linkBlk)
 		if (!cmdlink) {
 			return undefined
@@ -101,6 +91,8 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		if (!removeCmd) {
 			return undefined
 		}
+		const md = new vscode.MarkdownString(undefined, true)
+		md.appendText(fileUri.toString() + '\n')
 		md.appendMarkdown(`[Update](${cmdlink}) &nbsp; &nbsp; &nbsp; [Remove](${removeCmd})`)
 		md.isTrusted = true
 		return new vscode.Hover(md, linkBlk.linkStrRange)
