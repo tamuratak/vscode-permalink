@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import {LinkBlock} from './documentutil'
 import {LinkToCode} from './link'
 import type {Extension} from './main'
-import type {SnippetArgs} from './types'
+import type {SnippetArgs, TargetRange} from './types'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 
@@ -131,7 +131,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		if (!linkBlk.codeBlockRange) {
 			return undefined
 		}
-		const args: SnippetArgs['targetRange'] = {
+		const args: TargetRange = {
 			start: { line: linkBlk.codeBlockRange.start.line, character: 0 },
 			end: { line: linkBlk.codeBlockRange.end.line + 1, character: 0 }
 		}

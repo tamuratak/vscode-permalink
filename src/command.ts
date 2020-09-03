@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import {getFileExt} from './fileext'
 import type {Extension} from './main'
-import type {SnippetResource, SnippetArgs} from './types'
+import type {SnippetResource, SnippetArgs, TargetRange} from './types'
 import * as utils from './utils'
 
 export class Command {
@@ -85,7 +85,7 @@ export class Command {
         })
     }
 
-    async removeSnippet(targetRange: SnippetArgs['targetRange']) {
+    async removeSnippet(targetRange: TargetRange) {
         if (!vscode.window.activeTextEditor) {
             return undefined
         }

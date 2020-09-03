@@ -7,7 +7,7 @@ import {Fetcher} from './fetcher'
 import {LinkToCodeFactory} from './linkfactory'
 import {LinkResolver} from './linkresolver'
 import {SnippetFactory} from './snippet'
-import type {SnippetArgs} from './types'
+import type {SnippetArgs, TargetRange} from './types'
 
 export function activate(context: vscode.ExtensionContext) {
 	const extension = new Extension()
@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('linktocode.replace-snippet', (obj: SnippetArgs) => {
 			extension.command.replaceSnippet(obj)
 		}),
-		vscode.commands.registerCommand('linktocode.remove-snippet', (obj: SnippetArgs['targetRange']) => {
+		vscode.commands.registerCommand('linktocode.remove-snippet', (obj: TargetRange) => {
 			extension.command.removeSnippet(obj)
 		})
 	)
