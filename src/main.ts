@@ -29,6 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
 		}),
 		vscode.commands.registerCommand('linktocode.replace-snippet', (obj: SnippetArgs) => {
 			extension.command.replaceSnippet(obj)
+		}),
+		vscode.commands.registerCommand('linktocode.remove-snippet', (obj: SnippetArgs['targetRange']) => {
+			extension.command.removeSnippet(obj)
 		})
 	)
 }

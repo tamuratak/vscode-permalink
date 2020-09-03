@@ -97,13 +97,10 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 		if (!cmdlink) {
 			return undefined
 		}
-		const removeCmd = vscode.Uri.parse('command:linktocode.replace-snippet').with({
-			query: JSON.stringify({
-				snippet: '',
-				start: linkBlk.codeBlockRange.start.line,
-				end: linkBlk.codeBlockRange.end.line
-			})
-		})
+		const removeCmd = this.commandLinkToRemove(linkBlk)
+		if (!removeCmd) {
+			return undefined
+		}
 		md.appendMarkdown(`[Update](${cmdlink}) &nbsp; &nbsp; &nbsp; [Remove](${removeCmd})`)
 		md.isTrusted = true
 		return new vscode.Hover(md, linkBlk.linkStrRange)
@@ -133,6 +130,20 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 			}
 		}
 		const cmdlink = vscode.Uri.parse('command:linktocode.replace-snippet').with({
+			query: JSON.stringify(args)
+		})
+		return cmdlink
+	}
+
+	private commandLinkToRemove(linkBlk: LinkBlock): vscode.Uri | undefined {
+		if (!linkBlk.codeBlockRange) {
+			return undefined
+		}
+		const args: SnippetArgs['targetRange'] = {
+			start: { line: linkBlk.codeBlockRange.start.line, character: 0 },
+			end: { line: linkBlk.codeBlockRange.end.line + 1, character: 0 }
+		}
+		const cmdlink = vscode.Uri.parse('command:linktocode.remove-snippet').with({
 			query: JSON.stringify(args)
 		})
 		return cmdlink

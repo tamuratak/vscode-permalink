@@ -4,16 +4,6 @@ import type {Extension} from './main'
 import type {FetcherTarget, SnippetArgs} from './types'
 import * as utils from './utils'
 
-export type PasteSnippetArgs = {
-    uri: vscode.Uri,
-    targetLine: number
-}
-
-export type ReplaceSnippetArgs = {
-    uri: vscode.Uri,
-    targetRange: vscode.Range
-}
-
 export class Command {
 
     constructor(private readonly extension: Extension) {}
@@ -92,6 +82,16 @@ export class Command {
         const range = utils.copyRange(args.targetRange)
         return await vscode.window.activeTextEditor.edit((edit) => {
             edit.replace(range, snippet)
+        })
+    }
+
+    async removeSnippet(targetRange: SnippetArgs['targetRange']) {
+        if (!vscode.window.activeTextEditor) {
+            return undefined
+        }
+        const range = utils.copyRange(targetRange)
+        return await vscode.window.activeTextEditor.edit((edit) => {
+            edit.replace(range, '')
         })
     }
 
