@@ -25,7 +25,7 @@ export class LinkToCodeFactory {
     fromStr(linkStr: string): LinkToCode | undefined {
         let uri: vscode.Uri
         try {
-            uri = vscode.Uri.parse(linkStr)
+            uri = vscode.Uri.parse(linkStr, true)
         } catch {
             return undefined
         }
@@ -36,7 +36,7 @@ export class LinkToCodeFactory {
         if (uri.scheme !== link.scheme) {
             return undefined
         }
-        const filePath = uri.path
+        const filePath = uri.path.replace(/^\//, '')
         let start: number | undefined
         let end: number | undefined
         const match = /L(\d+)([-,](\d+))?/.exec(uri.fragment)
