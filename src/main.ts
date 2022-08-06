@@ -7,7 +7,36 @@ import {Fetcher} from './fetcher'
 import {LinkToCodeFactory} from './linkfactory'
 import {LinkResolver} from './linkresolver'
 import {SnippetFactory} from './snippet'
-import type {SnippetArgs, TargetRange} from './types'
+import type {SnippetArgs, TargetRange} from './types/git/types'
+import {GitExtension} from './types/git/git'
+import path from 'path'
+import { getRevisionUri } from './gitlens'
+
+
+async function printCommitHash() {
+    const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports
+	const git = gitExtension?.getAPI(1)
+    const uri = vscode.window.activeTextEditor?.document.uri
+    const workspaceDir = vscode.workspace.workspaceFolders?.[0].uri.fsPath
+    if (workspaceDir && uri) {
+        const revUri = getRevisionUri(workspaceDir, uri.path, 'abcd')
+        console.log(JSON.stringify(revUri))
+//        vscode.commands.executeCommand('vscode.open', revUri)
+        const fileString = await vscode.workspace.fs.readFile(revUri)
+        console.log(fileString.slice(0,100).toString())
+    }
+    if (uri && git) {
+        const dir = path.posix.dirname(uri.path)        
+        const repo = await git.init(uri.with({path: dir}))
+        let commit = await repo?.getCommit('HEAD')
+        console.log(commit?.hash)
+        commit = await repo?.getCommit('aef51adb2dba')
+        console.log(commit?.hash)
+    }
+    const wspUri = vscode.Uri.parse('workspace://uu@aaa/sr!"#$%&\'@[{`]:;l}*+_?>_/.()0=~|c/main.ts?c=abd123', true)
+    console.log(wspUri.toJSON())
+    console.log(wspUri.toString())
+}
 
 export function activate(context: vscode.ExtensionContext) {
     const extension = new Extension()
@@ -32,9 +61,12 @@ export function activate(context: vscode.ExtensionContext) {
         }),
         vscode.commands.registerCommand('linktocode.remove-snippet', (obj: TargetRange) => {
             extension.command.removeSnippet(obj)
+        }),
+        vscode.commands.registerCommand('linktocode.printCommitHash', () => {
+           printCommitHash() 
         })
-        )
-    }
+    )
+}
 
     export class Extension {
         readonly linkFactory: LinkToCodeFactory

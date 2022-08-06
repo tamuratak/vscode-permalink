@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import * as link from './link'
+import * as link from './linktocode'
 import type {Extension} from './main'
 
 export class LinkToCodeLinkProvider implements vscode.DocumentLinkProvider {
@@ -17,11 +17,11 @@ export class LinkToCodeLinkProvider implements vscode.DocumentLinkProvider {
                     break
                 }
                 const linkStr = m[0]
-                const linkObj = this.extension.linkFactory.fromStr(linkStr)
-                if (linkObj) {
+                const linkToCodeObj = this.extension.linkFactory.fromStr(linkStr)
+                if (linkToCodeObj) {
                     const range = new vscode.Range(i, m.index, i, m.index + linkStr.length)
-                    const uriObj = await this.extension.linkResolver.resolveLink(linkObj)
-                    const uri = uriObj?.with({ fragment: linkObj.fragment })
+                    const uriObj = await this.extension.linkResolver.resolveLink(linkToCodeObj)
+                    const uri = uriObj?.with({ fragment: linkToCodeObj.fragment })
                     ret.push(new vscode.DocumentLink(range, uri))
                 }
             }

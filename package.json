@@ -12,7 +12,7 @@
     "url": "https://github.com/tamuratak/vscode-linktocode.git"
   },
   "engines": {
-    "vscode": "^1.45.0"
+    "vscode": "^1.69.0"
   },
   "contributes": {
     "commands": [
@@ -27,6 +27,10 @@
       {
         "command": "linktocode.paste-link-with-snippet",
         "title": "Paste Link wit Code Snippet"
+      },
+      {
+        "command": "linktocode.printCommitHash",
+        "title": "Print Commit Hash"
       }
     ],
     "keybindings": [
@@ -61,7 +65,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^16",
-    "@types/vscode": "1.45.0",
+    "@types/vscode": "1.69.1",
     "@typescript-eslint/eslint-plugin": "5.30.7",
     "@typescript-eslint/parser": "5.30.7",
     "eslint": "8.20.0",

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
-import type {LinkToCode} from './link'
-import type {SnippetResource} from './types'
+import type {LinkToCode} from './linktocode'
+import type {SnippetResource} from './types/git/types'
 
 export class LinkResolver {
 

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
-import {getFileExt} from './fileext'
+import {getFileExt} from './utils/fileext'
 import type {Extension} from './main'
-import type {SnippetResource} from './types'
+import type {SnippetResource} from './types/git/types'
 
 export class SnippetFactory {
 
