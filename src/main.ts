@@ -10,7 +10,8 @@ import {SnippetFactory} from './snippet'
 import type {SnippetArgs, TargetRange} from './types/git/types'
 import {GitExtension} from './types/git/git'
 import path from 'path'
-import { getRevisionUri } from './gitlens'
+import {getRevisionUri} from './gitlens'
+import {Git} from './git'
 
 
 async function printCommitHash() {
@@ -21,7 +22,12 @@ async function printCommitHash() {
     if (workspaceDir && uri) {
         const revUri = getRevisionUri(workspaceDir, uri.path, 'abcd')
         console.log(JSON.stringify(revUri))
-//        vscode.commands.executeCommand('vscode.open', revUri)
+        await vscode.commands.executeCommand('vscode.open', revUri)
+        console.log(JSON.stringify(vscode.window.tabGroups.all.map((g) => g.tabs.map((tab) => {
+            const input = tab.input as any
+            const uri =  input.uri as vscode.Uri
+            return uri.toString()
+        }))))
         const fileString = await vscode.workspace.fs.readFile(revUri)
         console.log(fileString.slice(0,100).toString())
     }
@@ -40,7 +46,6 @@ async function printCommitHash() {
 
 export function activate(context: vscode.ExtensionContext) {
     const extension = new Extension()
-    console.log('link to code activated')
     context.subscriptions.push(
         vscode.languages.registerHoverProvider({ scheme: 'file', language: 'markdown' }, new HoverOnLinkProvider(extension)),
         vscode.languages.registerDocumentLinkProvider({ scheme: 'file', language: 'markdown' }, new LinkToCodeLinkProvider(extension)),
@@ -66,6 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
            printCommitHash() 
         })
     )
+    console.log('link to code activated')
 }
 
     export class Extension {
@@ -75,6 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
         readonly documentUtil: DocumentUtil
         readonly fetcher: Fetcher
         readonly snippetFactory: SnippetFactory
+        readonly git: Git
 
         constructor() {
             this.command = new Command(this)
@@ -83,6 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
             this.linkFactory = new LinkToCodeFactory()
             this.linkResolver = new LinkResolver()
             this.snippetFactory = new SnippetFactory(this)
+            this.git = new Git()
         }
 
     }
