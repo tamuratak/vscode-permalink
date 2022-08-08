@@ -1,14 +1,17 @@
 import * as vscode from 'vscode'
 import type {LinkToCode} from './linktocode'
+import { Extension } from './main'
 import type {SnippetResource} from './types/git/types'
 
 export class LinkResolver {
 
-    async resolveSnippetResource(link: LinkToCode, dir?: vscode.WorkspaceFolder): Promise<SnippetResource | undefined> {
+    constructor(readonly extension: Extension) { }
+
+    async resolveSnippetResource(link: LinkToCode): Promise<SnippetResource | undefined> {
         if (!link.targetCode) {
             return undefined
         }
-        const linkUri = await this.resolveLink(link, dir)
+        const linkUri = await this.resolveLink(link)
         if (!linkUri) {
             return undefined
         }
@@ -19,9 +22,15 @@ export class LinkResolver {
         }
     }
 
-    async resolveLink(link: LinkToCode, dir?: vscode.WorkspaceFolder): Promise<vscode.Uri | undefined> {
-        if (dir) {
-            return this.findFile(link, dir)
+    async resolveLink(link: LinkToCode): Promise<vscode.Uri | undefined> {
+        let workspace: vscode.WorkspaceFolder | undefined
+        if (link.authority) {
+            workspace = vscode.workspace.workspaceFolders?.find((ws) => ws.name === link.authority)
+            if (!workspace) {
+                const commit = link.authority
+                const repo = await this.extension.git.defaultRepo()
+                repo?.getCommit(commit)
+            }
         }
         const curDocUri = vscode.window.activeTextEditor?.document.uri
         if (curDocUri) {

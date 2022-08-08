@@ -34,6 +34,7 @@ async function printCommitHash() {
     if (uri && git) {
         const dir = path.posix.dirname(uri.path)        
         const repo = await git.init(uri.with({path: dir}))
+        console.log(JSON.stringify(repo?.rootUri.fsPath))
         let commit = await repo?.getCommit('HEAD')
         console.log(commit?.hash)
         commit = await repo?.getCommit('aef51adb2dba')
@@ -85,7 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
             this.documentUtil = new DocumentUtil(this)
             this.fetcher = new Fetcher(this)
             this.linkFactory = new LinkToCodeFactory()
-            this.linkResolver = new LinkResolver()
+            this.linkResolver = new LinkResolver(this)
             this.snippetFactory = new SnippetFactory(this)
             this.git = new Git()
         }
