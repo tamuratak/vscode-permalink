@@ -13,11 +13,14 @@ export class Command {
         const selection = editor.selection
         const startLine = selection.start.line + 1
         const endLine = selection.isEmpty ? startLine : selection.end.line + 1
-        let wsName: string | undefined
+        let authority: string | undefined
         if (withWorkspace) {
-            wsName = vscode.workspace.getWorkspaceFolder(doc.uri)?.name
+            authority = vscode.workspace.getWorkspaceFolder(doc.uri)?.name
+        } else {
+            const commit = await this.extension.git.getCommit(doc.uri)
+            authority = commit?.hash
         }
-        const link = this.extension.linkFactory.fromDoc(doc, startLine, endLine, wsName)
+        const link = this.extension.linkFactory.fromDoc(doc, startLine, endLine, authority)
         if (!link) {
             return
         }
