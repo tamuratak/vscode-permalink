@@ -35,8 +35,8 @@ export class LinkToCodeFactory {
             start = Number(match[1])
             end = match[3] ? Number(match[3]) : start
         }
-        const workspace = vscode.workspace.getWorkspaceFolder(uri)
         const authority = uri.authority || undefined
+        const workspace = vscode.workspace.workspaceFolders?.find((ws) => ws.name === authority) || vscode.workspace.getWorkspaceFolder(uri)
         return new LinkToCode(workspace, filePath, start, end, authority)
     }
 

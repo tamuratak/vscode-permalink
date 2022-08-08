@@ -11,11 +11,11 @@ export class LinkToCode {
     }
 
     constructor(
-        readonly workspace: WorkspaceFolder | undefined,
+        public workspace: WorkspaceFolder | undefined,
         readonly path: string,
         start?: number,
         end?: number,
-        readonly authority?: string
+        readonly commit?: string
     ) {
         if (start !== undefined) {
             if (end !== undefined) {
@@ -39,7 +39,7 @@ export class LinkToCode {
     }
 
     toString() {
-        return `${LinkToCodeScheme}://${this.authority}/${this.path}#${this.fragment}`
+        return `${LinkToCodeScheme}://${this.commit}/${this.path}#${this.fragment}`
     }
 
 }

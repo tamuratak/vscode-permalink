@@ -23,30 +23,15 @@ export class LinkResolver {
     }
 
     async resolveLink(link: LinkToCode): Promise<vscode.Uri | undefined> {
-        let workspace: vscode.WorkspaceFolder | undefined
-        if (link.authority) {
-            workspace = vscode.workspace.workspaceFolders?.find((ws) => ws.name === link.authority)
-            if (!workspace) {
-                const commit = link.authority
-                const repo = await this.extension.git.defaultRepo()
-                repo?.getCommit(commit)
-            }
+        if (link.commit) {
+            const repo = await this.extension.git.defaultRepo()
+            const commit = await repo?.getCommit(link.commit)
         }
-        const curDocUri = vscode.window.activeTextEditor?.document.uri
-        if (curDocUri) {
-            const curFoler = vscode.workspace.getWorkspaceFolder(curDocUri)
-            if (curFoler) {
-                return this.findFile(link, curFoler)
-            }
+        if (link.workspace) {
+            return this.findFile(link, link.workspace)
         }
-        if (!vscode.workspace.workspaceFolders) {
-            return undefined
-        }
-        for(const folder of vscode.workspace.workspaceFolders) {
-            const ret = await this.findFile(link, folder)
-            if (ret) {
-                return ret
-            }
+        for(const folder of vscode.workspace.workspaceFolders || []) {
+            return this.findFile(link, folder)
         }
         return undefined
     }
