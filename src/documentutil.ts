@@ -14,7 +14,7 @@ export class DocumentUtil {
     constructor(private readonly extension: Extension) {}
 
     getLinkAtPosition(document: vscode.TextDocument, position: vscode.Position): LinkBlock | undefined {
-        const linkStrRange = document.getWordRangeAtPosition(position, linkMod.reg)
+        const linkStrRange = document.getWordRangeAtPosition(position, linkMod.LinkToCodeRegExp)
         if (!linkStrRange) {
             return undefined
         }

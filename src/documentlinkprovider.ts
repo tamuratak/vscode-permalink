@@ -3,7 +3,7 @@ import * as link from './linktocode'
 import type {Extension} from './main'
 
 export class LinkToCodeLinkProvider implements vscode.DocumentLinkProvider {
-    private readonly linkReg = new RegExp(link.reg.source, 'g')
+    private readonly linkReg = new RegExp(link.LinkToCodeRegExp.source, 'g')
 
     constructor(private readonly extension: Extension) {}
 

@@ -21,7 +21,7 @@ export class LinkResolver {
 
     async resolveLink(link: LinkToCode, dir?: vscode.WorkspaceFolder): Promise<vscode.Uri | undefined> {
         if (dir) {
-         return this.findFile(link, dir)
+            return this.findFile(link, dir)
         }
         const curDocUri = vscode.window.activeTextEditor?.document.uri
         if (curDocUri) {

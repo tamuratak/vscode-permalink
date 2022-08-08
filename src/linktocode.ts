@@ -1,6 +1,6 @@
-export const scheme = 'workspace'
+export const LinkToCodeScheme = 'workspace'
 // workspace://workspace_name/relative_path_to_file#LXX-YY
-export const reg = /workspace:([-_~a-zA-Z0-9/%@\\.]+)(?:#L(\d+)(-(\d+))?)?/
+export const LinkToCodeRegExp = /workspace:([-_~a-zA-Z0-9/%@\\.]+)(?:#L(\d+)(-(\d+))?)?/
 
 export class LinkToCode {
     readonly targetCode?: {
@@ -36,7 +36,7 @@ export class LinkToCode {
     }
 
     toString() {
-        return `${scheme}://${this.authority}/${this.path}#${this.fragment}`
+        return `${LinkToCodeScheme}://${this.authority}/${this.path}#${this.fragment}`
     }
 
 }

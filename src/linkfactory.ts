@@ -24,7 +24,7 @@ export class LinkToCodeFactory {
     }
 
     fromUri(uri: vscode.Uri): LinkToCode | undefined {
-        if (uri.scheme !== link.scheme) {
+        if (uri.scheme !== link.LinkToCodeScheme) {
             return undefined
         }
         const filePath = uri.path.replace(/^\//, '')
