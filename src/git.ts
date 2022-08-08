@@ -1,6 +1,5 @@
 import * as vscode from 'vscode'
 import {Uri} from "vscode"
-import path from 'path'
 import {API, GitExtension, Repository} from './types/git/git'
 
 export class Git {
