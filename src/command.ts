@@ -18,7 +18,7 @@ export class Command {
             authority = vscode.workspace.getWorkspaceFolder(doc.uri)?.name
         } else {
             const commit = await this.extension.git.getCommit(doc.uri)
-            authority = commit?.hash
+            authority = commit?.hash.slice(0, 12)
         }
         const link = this.extension.linkFactory.fromDoc(doc, startLine, endLine, authority)
         if (!link) {
