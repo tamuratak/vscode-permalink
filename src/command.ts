@@ -69,22 +69,6 @@ export class Command {
         })
     }
 
-    async replaceSnippet(args: SnippetArgs) {
-        if (!vscode.window.activeTextEditor) {
-            return undefined
-        }
-        const snippeResource: SnippetResource = {
-            uri:  vscode.Uri.parse(args.resource.uri),
-            start: args.resource.start,
-            end: args.resource.end
-        }
-        const snippet = (await this.extension.snippetFactory.createMarkdown(snippeResource)).value.trim()
-        const range = utils.copyRange(args.targetRange)
-        return await vscode.window.activeTextEditor.edit((edit) => {
-            edit.replace(range, snippet)
-        })
-    }
-
     async removeSnippet(targetRange: TargetRange) {
         if (!vscode.window.activeTextEditor) {
             return undefined
