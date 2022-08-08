@@ -14,7 +14,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
             return undefined
         }
         if (linkBlk.codeBlockRange) {
-            const hov = await this.hoveForReplaceCommand(linkBlk)
+            const hov = await this.hoveForRemoveCommand(linkBlk)
             if (hov) {
                 return hov
             }
@@ -74,7 +74,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         return cmdlink
     }
 
-    private async hoveForReplaceCommand(linkBlk: LinkBlock) {
+    private async hoveForRemoveCommand(linkBlk: LinkBlock) {
         if (!linkBlk.codeBlockRange) {
             return undefined
         }
@@ -83,48 +83,15 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         if (!fileUri) {
             return undefined
         }
-        const cmdlink = await this.commandLinkToReplace(linkBlk)
-        if (!cmdlink) {
-            return undefined
-        }
         const removeCmd = this.commandLinkToRemove(linkBlk)
         if (!removeCmd) {
             return undefined
         }
         const md = new vscode.MarkdownString(undefined, true)
         md.appendText(fileUri.toString() + '\n')
-        md.appendMarkdown(`[Update](${cmdlink}) &nbsp; &nbsp; &nbsp; [Remove](${removeCmd})`)
+        md.appendMarkdown(`[Remove](${removeCmd})`)
         md.isTrusted = true
         return new vscode.Hover(md, linkBlk.linkStrRange)
-    }
-
-    private async commandLinkToReplace(linkBlk: LinkBlock): Promise<vscode.Uri | undefined> {
-        if (!linkBlk.codeBlockRange) {
-            return undefined
-        }
-        const link = linkBlk.link
-        const uriObj = await this.extension.linkResolver.resolveLink(link)
-        if (uriObj === undefined) {
-            return undefined
-        }
-        if (!link.targetCode) {
-            return undefined
-        }
-        const uri = uriObj.toString()
-        const {start, end} = link.targetCode
-        const args: SnippetArgs = {
-            resource: {
-                uri, start, end
-            },
-            targetRange: {
-                start: { line: linkBlk.codeBlockRange.start.line, character: 0 },
-                end: { line: linkBlk.codeBlockRange.end.line, character: 3 }
-            }
-        }
-        const cmdlink = vscode.Uri.parse('command:linktocode.replace-snippet').with({
-            query: JSON.stringify(args)
-        })
-        return cmdlink
     }
 
     private commandLinkToRemove(linkBlk: LinkBlock): vscode.Uri | undefined {
