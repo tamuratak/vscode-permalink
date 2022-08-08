@@ -13,15 +13,6 @@ export class LinkToCodeFactory {
         return pathMod.posix.relative(dir.uri.path, uri.path)
     }
 
-    private workspaceName(uri: vscode.Uri) {
-        const name = uri.authority
-        if (name && name !== '') {
-            return name
-        } else {
-            return undefined
-        }
-    }
-
     fromStr(linkStr: string): LinkToCode | undefined {
         let uri: vscode.Uri
         try {
@@ -44,17 +35,17 @@ export class LinkToCodeFactory {
             start = Number(match[1])
             end = match[3] ? Number(match[3]) : start
         }
-        const wsName = this.workspaceName(uri)
-        return new LinkToCode(filePath, start, end, wsName)
+        const authority = uri.authority || undefined
+        return new LinkToCode(filePath, start, end, authority)
     }
 
-    fromDoc(doc: vscode.TextDocument, start: number, end: number, wsName?: string): LinkToCode | undefined {
+    fromDoc(doc: vscode.TextDocument, start: number, end: number, authority?: string): LinkToCode | undefined {
         const docUri = doc.uri
         const relPath = this.relativePath(docUri)
         if (!relPath) {
             return undefined
         }
-        return new LinkToCode(relPath, start, end, wsName)
+        return new LinkToCode(relPath, start, end, authority)
     }
 
 }

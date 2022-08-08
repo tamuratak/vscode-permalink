@@ -12,8 +12,7 @@ export class LinkToCode {
         readonly path: string,
         start?: number,
         end?: number,
-        readonly workspace?: string,
-        readonly commit?: string
+        readonly authority?: string
     ) {
         if (start !== undefined) {
             if (end !== undefined) {
@@ -22,15 +21,6 @@ export class LinkToCode {
                 this.targetCode = { start, end: start }
             }
         }
-    }
-
-    authority() {
-        if (this.commit) {
-            return this.commit
-        } else if (this.workspace) {
-            return this.workspace
-        }
-        return ''
     }
 
     get fragment(): string {
@@ -46,7 +36,7 @@ export class LinkToCode {
     }
 
     toString() {
-        return `${scheme}://${this.authority()}/${this.path}#${this.fragment}`
+        return `${scheme}://${this.authority}/${this.path}#${this.fragment}`
     }
 
 }
