@@ -24,7 +24,10 @@ export class LinkResolver {
 
     async resolveLink(link: LinkToCode): Promise<vscode.Uri | undefined> {
         if (link.commit) {
-            const repo = await this.extension.git.defaultRepo()
+            if (!link.workspace) {
+                return
+            }
+            const repo = await this.extension.git.getRepository(link.workspace)
             const commit = await repo?.getCommit(link.commit)
         }
         if (link.workspace) {

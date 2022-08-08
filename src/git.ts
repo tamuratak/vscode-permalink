@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import {Uri} from "vscode"
+import {Uri, WorkspaceFolder} from "vscode"
 import {API, GitExtension, Repository} from './types/git/git'
 
 export class Git {
@@ -17,15 +17,8 @@ export class Git {
         return this.#gitApi
     }
 
-    async defaultRepo() {
-        if (this.#defaultRepo) {
-            return this.#defaultRepo
-        }
-        const workspace = vscode.workspace.workspaceFolders?.[0]
-        if (workspace) {
-            this.#defaultRepo = (await this.gitApi?.init(workspace.uri)) || undefined
-        }
-        return this.#defaultRepo
+    async getRepository(workspace: WorkspaceFolder) {
+        return await this.gitApi?.init(workspace.uri)
     }
 
     async getCommit(uri: Uri) {
