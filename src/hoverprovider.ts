@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
-import { LinkBlock } from './documentutil'
-import { LinkToCode } from './linktocode'
+import type { LinkBlock } from './documentutil'
+import type { LinkToCode } from './linktocode'
 import type { Extension } from './main'
 import type { SnippetArgs, TargetRange } from './types/git/types'
 
@@ -22,7 +22,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         return this.hoverForFetchCommand(linkBlk, position)
     }
 
-    private async fileUri(link: LinkToCode) {
+    private async getFileUri(link: LinkToCode) {
         const uriObj = await this.extension.linkResolver.resolveLink(link)
         const fileUri = uriObj?.with({ fragment: link.fragment })
         if (!fileUri) {
@@ -31,9 +31,17 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         return fileUri
     }
 
+    private formatUri(uri: vscode.Uri): string {
+        if (uri.scheme === 'gitlens') {
+            const tmp = uri.with({authority: '...'})
+            return tmp.toString()
+        }
+        return uri.toString()
+    }
+
     private async hoverForFetchCommand(linkBlk: LinkBlock, position: vscode.Position) {
         const link = linkBlk.link
-        const fileUri = await this.fileUri(link)
+        const fileUri = await this.getFileUri(link)
         if (!fileUri) {
             return undefined
         }
@@ -42,7 +50,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
             return undefined
         }
         const md = new vscode.MarkdownString(undefined, true)
-        md.appendCodeblock(fileUri.toString() + '\n')
+        md.appendCodeblock(this.formatUri(fileUri) + '\n')
         md.appendMarkdown(`[Fetch](${cmdlink})`)
         md.isTrusted = true
         return new vscode.Hover(md, linkBlk.linkStrRange)
@@ -79,7 +87,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
             return undefined
         }
         const link = linkBlk.link
-        const fileUri = await this.fileUri(link)
+        const fileUri = await this.getFileUri(link)
         if (!fileUri) {
             return undefined
         }
@@ -88,7 +96,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
             return undefined
         }
         const md = new vscode.MarkdownString(undefined, true)
-        md.appendText(fileUri.toString() + '\n')
+        md.appendText(this.formatUri(fileUri) + '\n')
         md.appendMarkdown(`[Remove](${removeCmd})`)
         md.isTrusted = true
         return new vscode.Hover(md, linkBlk.linkStrRange)

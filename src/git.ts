@@ -5,6 +5,7 @@ import type {API, GitExtension, Repository} from './types/git/git'
 export class Git {
     #gitApi: API | undefined
     private repositoryStore = new Map<string, Repository>()
+
     private get gitApi() {
         if (this.#gitApi) {
             return this.#gitApi
