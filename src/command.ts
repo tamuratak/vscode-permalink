@@ -13,7 +13,7 @@ export class Command {
         const selection = editor.selection
         const startLine = selection.start.line + 1
         const endLine = selection.isEmpty ? startLine : selection.end.line + 1
-        const commit = await this.extension.git.getCommit(doc.uri)
+        const commit = await this.extension.git.getHeadCommit(doc.uri)
         const shortCommit = commit?.hash.slice(0, 12)
         const link = this.extension.linkFactory.fromSelectionOnDoc(doc, startLine, endLine, shortCommit)
         if (!link) {

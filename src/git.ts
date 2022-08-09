@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import type {Uri, WorkspaceFolder} from 'vscode'
-import type {API, GitExtension, Repository} from './types/git/git'
+import type {API, Commit, GitExtension, Repository} from './types/git/git'
 
 export class Git {
     #gitApi: API | undefined
@@ -46,7 +46,7 @@ export class Git {
         return
     }
 
-    async getCommit(uri: Uri) {
+    async getHeadCommit(uri: Uri): Promise<Commit | undefined> {
         const workspace = vscode.workspace.getWorkspaceFolder(uri)
         if (workspace) {
             const repo = await this.getRepository(workspace)
