@@ -10,7 +10,7 @@ import {SnippetFactory} from './snippet'
 import type {SnippetArgs, TargetRange} from './types/git/types'
 import {GitExtension} from './types/git/git'
 import path from 'path'
-import {getRevisionUri} from './gitlenslib/gitlens'
+import {getRevisionUri} from './gitlenslib/uriutils'
 import {Git} from './git'
 import { GitLens } from './gitlens'
 

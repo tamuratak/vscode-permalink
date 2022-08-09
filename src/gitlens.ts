@@ -1,5 +1,5 @@
 import {Uri} from 'vscode'
-import {decodeGitLensRevisionUriAuthority, getRevisionUri} from './gitlenslib/gitlens'
+import {decodeGitLensRevisionUriAuthority, getRevisionUri} from './gitlenslib/uriutils'
 import type {LinkToCode} from './linktocode'
 
 export class GitLens {
