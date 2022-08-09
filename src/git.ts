@@ -4,7 +4,8 @@ import type {API, GitExtension, Repository} from './types/git/git'
 
 export class Git {
     #gitApi: API | undefined
-    private repositoryStore = new Map<string, Repository>()
+    private workspaceRepositoryMap = new Map<string, Repository>()
+    private commitWorkspaceMap = new Map<string, WorkspaceFolder>()
 
     private get gitApi() {
         if (this.#gitApi) {
@@ -17,23 +18,28 @@ export class Git {
 
     async getRepository(workspace: WorkspaceFolder): Promise<Repository | undefined> {
         const uri = workspace.uri.toString()
-        let repo = this.repositoryStore.get(uri)
+        let repo = this.workspaceRepositoryMap.get(uri)
         if (repo) {
             return repo
         }
         repo = await this.gitApi?.init(workspace.uri) || undefined
         if (repo) {
-            this.repositoryStore.set(uri, repo)
+            this.workspaceRepositoryMap.set(uri, repo)
         }
         return repo
     }
 
     async findWorkspaceFolder(commit: string): Promise<WorkspaceFolder | undefined> {
+        const ret = this.commitWorkspaceMap.get(commit)
+        if (ret) {
+            return ret
+        }
         const dirs = vscode.workspace.workspaceFolders || []
         for (const dir of dirs) {
             const repo = await this.getRepository(dir)
             const commitObj = repo?.getCommit(commit)
             if (commitObj) {
+                this.commitWorkspaceMap.set(commit, dir)
                 return dir
             }
         }

@@ -96,7 +96,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
             return undefined
         }
         const md = new vscode.MarkdownString(undefined, true)
-        md.appendText(this.formatUri(fileUri) + '\n')
+        md.appendCodeblock(this.formatUri(fileUri) + '\n')
         md.appendMarkdown(`[Remove](${removeCmd})`)
         md.isTrusted = true
         return new vscode.Hover(md, linkBlk.linkStrRange)
