@@ -1,12 +1,18 @@
-import {Uri} from 'vscode'
-import {decodeGitLensRevisionUriAuthority, getRevisionUri} from './gitlenslib/uriutils'
-import type {LinkToCode} from './linktocode'
+import { Uri } from 'vscode'
+import { decodeGitLensRevisionUriAuthority, getRevisionUri } from './gitlenslib/uriutils'
+import type { LinkToCode } from './linktocode'
+import { Extension } from './main'
 
 export class GitLens {
 
-    getGitLensUri(link: LinkToCode) {
-        if (link.workspace && link.commit) {
-            return getRevisionUri(link.workspace.uri.fsPath, link.path, link.commit)
+    constructor(private readonly extension: Extension) { }
+
+    async getGitLensUri(link: LinkToCode) {
+        if (link.commit) {
+            const workspace = link.workspace || await this.extension.git.findWorkspaceFolder(link.commit)
+            if (workspace) {
+                return getRevisionUri(workspace.uri.fsPath, link.path, link.commit)
+            }
         }
         return
     }

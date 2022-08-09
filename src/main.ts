@@ -1,17 +1,17 @@
 import * as vscode from 'vscode'
-import {Command} from './command'
-import {DocumentUtil} from './documentutil'
-import {HoverOnLinkProvider} from './hoverprovider'
-import {LinkToCodeLinkProvider} from './documentlinkprovider'
-import {Fetcher} from './fetcher'
-import {LinkToCodeFactory} from './linkfactory'
-import {LinkResolver} from './linkresolver'
-import {SnippetFactory} from './snippet'
-import type {SnippetArgs, TargetRange} from './types/git/types'
-import {GitExtension} from './types/git/git'
+import { Command } from './command'
+import { DocumentUtil } from './documentutil'
+import { HoverOnLinkProvider } from './hoverprovider'
+import { LinkToCodeLinkProvider } from './documentlinkprovider'
+import { Fetcher } from './fetcher'
+import { LinkToCodeFactory } from './linkfactory'
+import { LinkResolver } from './linkresolver'
+import { SnippetFactory } from './snippet'
+import type { SnippetArgs, TargetRange } from './types/git/types'
+import { GitExtension } from './types/git/git'
 import path from 'path'
-import {getRevisionUri} from './gitlenslib/uriutils'
-import {Git} from './git'
+import { getRevisionUri } from './gitlenslib/uriutils'
+import { Git } from './git'
 import { GitLens } from './gitlens'
 
 
@@ -88,7 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
             this.linkResolver = new LinkResolver(this)
             this.snippetFactory = new SnippetFactory(this)
             this.git = new Git()
-            this.gitLens = new GitLens()
+            this.gitLens = new GitLens(this)
         }
 
     }

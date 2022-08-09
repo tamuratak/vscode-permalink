@@ -1,11 +1,11 @@
 import * as vscode from 'vscode'
 import * as link from './linktocode'
-import type {Extension} from './main'
+import type { Extension } from './main'
 
 export class LinkToCodeLinkProvider implements vscode.DocumentLinkProvider {
     private readonly linkReg = new RegExp(link.LinkToCodeRegExp.source, 'g')
 
-    constructor(private readonly extension: Extension) {}
+    constructor(private readonly extension: Extension) { }
 
     async provideDocumentLinks(document: vscode.TextDocument) {
         const ret: vscode.DocumentLink[] = []

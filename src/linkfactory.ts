@@ -1,8 +1,8 @@
 import * as pathMod from 'path'
 import * as vscode from 'vscode'
 import * as link from './linktocode'
-import {LinkToCode} from './linktocode'
-import {Extension} from './main'
+import { LinkToCode } from './linktocode'
+import type { Extension } from './main'
 
 export class LinkToCodeFactory {
 

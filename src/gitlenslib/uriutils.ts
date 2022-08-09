@@ -25,8 +25,8 @@ SOFTWARE.
 
 */
 
-import {Uri} from 'vscode'
-import {isAbsolute as _isAbsolute} from 'path'
+import { Uri } from 'vscode'
+import { isAbsolute as _isAbsolute } from 'path'
 
 export interface RevisionUriData {
 	ref?: string,

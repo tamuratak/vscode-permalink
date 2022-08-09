@@ -1,11 +1,11 @@
 import * as vscode from 'vscode'
-import type {LinkToCode} from './linktocode'
-import { Extension } from './main'
-import type {SnippetResource} from './types/git/types'
+import type { LinkToCode } from './linktocode'
+import type { Extension } from './main'
+import type { SnippetResource } from './types/git/types'
 
 export class LinkResolver {
 
-    constructor(readonly extension: Extension) { }
+    constructor(private readonly extension: Extension) { }
 
     async resolveSnippetResource(link: LinkToCode): Promise<SnippetResource | undefined> {
         if (!link.targetCode) {
@@ -24,9 +24,6 @@ export class LinkResolver {
 
     async resolveLink(link: LinkToCode): Promise<vscode.Uri | undefined> {
         if (link.commit) {
-            if (!link.workspace) {
-                return
-            }
             return this.extension.gitLens.getGitLensUri(link)
         }
         if (link.workspace) {
