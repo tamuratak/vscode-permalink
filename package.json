@@ -4,7 +4,7 @@
   "version": "0.3.0",
   "publisher": "tamuratak",
   "license": "MIT",
-  "description": "GitHub-like link to code snippet on VS Code",
+  "description": "Support workspace-local URI on VS Code",
   "homepage": "https://github.com/tamuratak/vscode-linktocode",
   "main": "./out/src/main.js",
   "repository": {
