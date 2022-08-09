@@ -12,6 +12,7 @@ import {GitExtension} from './types/git/git'
 import path from 'path'
 import {getRevisionUri} from './gitlenslib/gitlens'
 import {Git} from './git'
+import { GitLens } from './gitlens'
 
 
 async function printCommitHash() {
@@ -77,6 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
         readonly fetcher: Fetcher
         readonly snippetFactory: SnippetFactory
         readonly git: Git
+        readonly gitLens: GitLens
 
         constructor() {
             this.command = new Command(this)
@@ -86,6 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
             this.linkResolver = new LinkResolver(this)
             this.snippetFactory = new SnippetFactory(this)
             this.git = new Git()
+            this.gitLens = new GitLens()
         }
 
     }

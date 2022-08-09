@@ -1,5 +1,4 @@
 import * as vscode from 'vscode'
-import { getRevisionUri } from './gitlenslib/gitlens'
 import type {LinkToCode} from './linktocode'
 import { Extension } from './main'
 import type {SnippetResource} from './types/git/types'
@@ -23,19 +22,12 @@ export class LinkResolver {
         }
     }
 
-    private getGitLensUri(link: LinkToCode) {
-        if (link.workspace && link.commit) {
-            return getRevisionUri(link.workspace.uri.fsPath, link.path, link.commit)
-        }
-        return
-    }
-
     async resolveLink(link: LinkToCode): Promise<vscode.Uri | undefined> {
         if (link.commit) {
             if (!link.workspace) {
                 return
             }
-            return this.getGitLensUri(link)
+            return this.extension.gitLens.getGitLensUri(link)
         }
         if (link.workspace) {
             return this.findFile(link, link.workspace)
