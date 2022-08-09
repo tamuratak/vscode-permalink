@@ -26,14 +26,14 @@ async function printCommitHash() {
         await vscode.commands.executeCommand('vscode.open', revUri)
         console.log(JSON.stringify(vscode.window.tabGroups.all.map((g) => g.tabs.map((tab) => {
             const input = tab.input as any
-            const uri =  input.uri as vscode.Uri
-            return uri.toString()
+            const _uri = input.uri as vscode.Uri
+            return _uri.toString()
         }))))
         const fileString = await vscode.workspace.fs.readFile(revUri)
         console.log(fileString.slice(0,100).toString())
     }
     if (uri && git) {
-        const dir = path.posix.dirname(uri.path)        
+        const dir = path.posix.dirname(uri.path)
         const repo = await git.init(uri.with({path: dir}))
         console.log(JSON.stringify(repo?.rootUri.fsPath))
         let commit = await repo?.getCommit('HEAD')
@@ -64,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
             extension.command.removeSnippet(obj)
         }),
         vscode.commands.registerCommand('linktocode.printCommitHash', () => {
-           printCommitHash() 
+           printCommitHash()
         })
     )
     console.log('link to code activated')

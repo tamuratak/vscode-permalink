@@ -24,18 +24,17 @@ SOFTWARE.
 
 */
 
-import { Disposable, Event, ProviderResult, Uri } from 'vscode';
-export { ProviderResult } from 'vscode';
+import type { Disposable, Event, ProviderResult } from 'vscode'
 
 export interface API {
-	pickRemoteSource(options: PickRemoteSourceOptions): Promise<string | PickRemoteSourceResult | undefined>;
-	registerRemoteSourceProvider(provider: RemoteSourceProvider): Disposable;
+	pickRemoteSource(options: PickRemoteSourceOptions): Promise<string | PickRemoteSourceResult | undefined>,
+	registerRemoteSourceProvider(provider: RemoteSourceProvider): Disposable
 }
 
 export interface GitBaseExtension {
 
-	readonly enabled: boolean;
-	readonly onDidChangeEnablement: Event<boolean>;
+	readonly enabled: boolean,
+	readonly onDidChangeEnablement: Event<boolean>,
 
 	/**
 	 * Returns a specific API version.
@@ -47,35 +46,35 @@ export interface GitBaseExtension {
 	 * @param version Version number.
 	 * @returns API instance
 	 */
-	getAPI(version: 1): API;
+	getAPI(version: 1): API
 }
 
 export interface PickRemoteSourceOptions {
-	readonly providerLabel?: (provider: RemoteSourceProvider) => string;
-	readonly urlLabel?: string;
-	readonly providerName?: string;
-	readonly branch?: boolean; // then result is PickRemoteSourceResult
+	readonly providerLabel?: (provider: RemoteSourceProvider) => string,
+	readonly urlLabel?: string,
+	readonly providerName?: string,
+	readonly branch?: boolean // then result is PickRemoteSourceResult
 }
 
 export interface PickRemoteSourceResult {
-	readonly url: string;
-	readonly branch?: string;
+	readonly url: string,
+	readonly branch?: string
 }
 
 export interface RemoteSource {
-	readonly name: string;
-	readonly description?: string;
-	readonly url: string | string[];
+	readonly name: string,
+	readonly description?: string,
+	readonly url: string | string[]
 }
 
 export interface RemoteSourceProvider {
-	readonly name: string;
+	readonly name: string,
 	/**
 	 * Codicon name
 	 */
-	readonly icon?: string;
-	readonly supportsQuery?: boolean;
+	readonly icon?: string,
+	readonly supportsQuery?: boolean,
 
-	getBranches?(url: string): ProviderResult<string[]>;
-	getRemoteSources(query?: string): ProviderResult<RemoteSource[]>;
+	getBranches?(url: string): ProviderResult<string[]>,
+	getRemoteSources(query?: string): ProviderResult<RemoteSource[]>
 }

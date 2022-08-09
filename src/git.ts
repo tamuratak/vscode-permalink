@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import {Uri, WorkspaceFolder} from "vscode"
+import {Uri, WorkspaceFolder} from 'vscode'
 import {API, GitExtension} from './types/git/git'
 
 export class Git {

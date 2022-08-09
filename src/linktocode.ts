@@ -1,4 +1,4 @@
-import type {WorkspaceFolder} from "vscode"
+import type {WorkspaceFolder} from 'vscode'
 
 export const LinkToCodeScheme = 'workspace'
 // workspace://workspace_name/relative_path_to_file#LXX-YY
