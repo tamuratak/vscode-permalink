@@ -5,8 +5,6 @@ import {API, GitExtension} from './types/git/git'
 export class Git {
     #gitApi: API | undefined
 
-    constructor() { }
-
     private get gitApi() {
         if (this.#gitApi) {
             return this.#gitApi

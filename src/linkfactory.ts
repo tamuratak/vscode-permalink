@@ -13,7 +13,7 @@ export class LinkToCodeFactory {
         return pathMod.posix.relative(dir.uri.path, uri.path)
     }
 
-    fromStr(linkStr: string, doc?: vscode.TextDocument): LinkToCode | undefined {
+    fromLinkStr(linkStr: string, doc?: vscode.TextDocument): LinkToCode | undefined {
         let uri: vscode.Uri
         try {
             uri = vscode.Uri.parse(linkStr, true)
@@ -28,7 +28,7 @@ export class LinkToCodeFactory {
         return workspace
     }
 
-    fromUri(uri: vscode.Uri, doc?: vscode.TextDocument): LinkToCode | undefined {
+    private fromUri(uri: vscode.Uri, doc?: vscode.TextDocument): LinkToCode | undefined {
         if (uri.scheme !== link.LinkToCodeScheme) {
             return undefined
         }
@@ -45,7 +45,7 @@ export class LinkToCodeFactory {
         return new LinkToCode(workspace, filePath, start, end, authority)
     }
 
-    fromDoc(doc: vscode.TextDocument, start: number, end: number, authority?: string): LinkToCode | undefined {
+    fromSelectionOnDoc(doc: vscode.TextDocument, start: number, end: number, authority?: string): LinkToCode | undefined {
         const docUri = doc.uri
         const relPath = this.relativePath(docUri)
         if (!relPath) {

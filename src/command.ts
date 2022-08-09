@@ -15,7 +15,7 @@ export class Command {
         const endLine = selection.isEmpty ? startLine : selection.end.line + 1
         const commit = await this.extension.git.getCommit(doc.uri)
         const authority = commit?.hash.slice(0, 12)
-        const link = this.extension.linkFactory.fromDoc(doc, startLine, endLine, authority)
+        const link = this.extension.linkFactory.fromSelectionOnDoc(doc, startLine, endLine, authority)
         if (!link) {
             return
         }
@@ -25,7 +25,7 @@ export class Command {
     async pasteLinkWithSnippet(editor: vscode.TextEditor) {
         const selection = editor.selection
         const linkStr = await vscode.env.clipboard.readText()
-        const link = this.extension.linkFactory.fromStr(linkStr)
+        const link = this.extension.linkFactory.fromLinkStr(linkStr)
         if (!link) {
             return undefined
         }
