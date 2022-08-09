@@ -14,6 +14,10 @@
   "engines": {
     "vscode": "^1.69.0"
   },
+  "extensionDependencies": [
+    "vscode.git",
+    "eamodio.gitlens"
+  ],
   "contributes": {
     "commands": [
       {
@@ -58,9 +62,9 @@
   "devDependencies": {
     "@types/node": "^16",
     "@types/vscode": "1.69.1",
-    "@typescript-eslint/eslint-plugin": "5.30.7",
-    "@typescript-eslint/parser": "5.30.7",
-    "eslint": "8.20.0",
+    "@typescript-eslint/eslint-plugin": "5.33.0",
+    "@typescript-eslint/parser": "5.33.0",
+    "eslint": "8.21.0",
     "typescript": "4.7.4",
     "vsce": "2.10.0"
   },
