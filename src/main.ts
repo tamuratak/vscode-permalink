@@ -53,9 +53,6 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerTextEditorCommand('linktocode.copy-line', (editor) => {
             extension.command.copyLine(editor)
         }),
-        vscode.commands.registerTextEditorCommand('linktocode.copy-line-with-workspace', (editor) => {
-            extension.command.copyLine(editor, true)
-        }),
         vscode.commands.registerTextEditorCommand('linktocode.paste-link-with-snippet', (editor) => {
             extension.command.pasteLinkWithSnippet(editor)
         }),

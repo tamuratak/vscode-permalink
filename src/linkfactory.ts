@@ -24,16 +24,7 @@ export class LinkToCodeFactory {
     }
 
     private guessWorkspace(uri: vscode.Uri, doc?: vscode.TextDocument) {
-        let workspace: vscode.WorkspaceFolder | undefined
-        if (uri.scheme === link.LinkToCodeScheme) {
-            workspace = vscode.workspace.workspaceFolders?.find((ws) => ws.name === uri.authority)
-        }
-        if (!workspace) {
-            workspace = vscode.workspace.getWorkspaceFolder(uri)
-        }
-        if (!workspace && doc) {
-            workspace = vscode.workspace.getWorkspaceFolder(doc.uri)
-        }
+        const workspace = vscode.workspace.getWorkspaceFolder(uri) || doc && vscode.workspace.getWorkspaceFolder(doc.uri)
         return workspace
     }
 

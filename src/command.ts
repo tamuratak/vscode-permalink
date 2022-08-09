@@ -8,18 +8,13 @@ export class Command {
 
     constructor(private readonly extension: Extension) {}
 
-    async copyLine(editor: vscode.TextEditor, withWorkspace = false) {
+    async copyLine(editor: vscode.TextEditor) {
         const doc = editor.document
         const selection = editor.selection
         const startLine = selection.start.line + 1
         const endLine = selection.isEmpty ? startLine : selection.end.line + 1
-        let authority: string | undefined
-        if (withWorkspace) {
-            authority = vscode.workspace.getWorkspaceFolder(doc.uri)?.name
-        } else {
-            const commit = await this.extension.git.getCommit(doc.uri)
-            authority = commit?.hash.slice(0, 12)
-        }
+        const commit = await this.extension.git.getCommit(doc.uri)
+        const authority = commit?.hash.slice(0, 12)
         const link = this.extension.linkFactory.fromDoc(doc, startLine, endLine, authority)
         if (!link) {
             return

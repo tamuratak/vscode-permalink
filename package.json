@@ -21,10 +21,6 @@
         "title": "Copy Line as Link"
       },
       {
-        "command": "linktocode.copy-line-with-workspace",
-        "title": "Copy Line with Workspace Name"
-      },
-      {
         "command": "linktocode.paste-link-with-snippet",
         "title": "Paste Link wit Code Snippet"
       },
@@ -45,10 +41,6 @@
       "editor/context": [
         {
           "command": "linktocode.copy-line",
-          "group": "90_linktocode"
-        },
-        {
-          "command": "linktocode.copy-line-with-workspace",
           "group": "90_linktocode"
         },
         {
