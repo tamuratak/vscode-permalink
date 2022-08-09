@@ -19,7 +19,7 @@ export class DocumentUtil {
             return undefined
         }
         const linkStr = document.getText(linkStrRange)
-        const link = this.extension.linkFactory.fromStr(linkStr)
+        const link = this.extension.linkFactory.fromStr(linkStr, document)
         if (!link) {
             return undefined
         }
