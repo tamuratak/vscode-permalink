@@ -169,7 +169,18 @@ function getRelativePath(pathOrUri: string | Uri, base: string | Uri): string {
     return normalizePath(relativePath);
 }
 
+const shaRegex = /(^[0-9a-f]{40}$)|(^[0]{40}(:|-)$)/;
+
+function isMatch(regex: RegExp, ref: string | undefined) {
+	return !ref ? false : regex.test(ref);
+}
+
+export function isSha(ref: string) {
+    return isMatch(shaRegex, ref);
+}
+
 export function getRevisionUri(repoPath: string, path: string, ref: string): Uri {
+    const label = isSha(ref) ? ref.slice(0, 7) : ref
 
     path = normalizePath(getAbsoluteUri(path, repoPath).fsPath);
     if (path.charCodeAt(0) !== slash) {
@@ -177,7 +188,7 @@ export function getRevisionUri(repoPath: string, path: string, ref: string): Uri
     }
 
     const metadata: RevisionUriData = {
-        ref: ref,
+        ref,
         repoPath: normalizePath(repoPath),
     };
 
@@ -185,7 +196,7 @@ export function getRevisionUri(repoPath: string, path: string, ref: string): Uri
         scheme: 'gitlens',
         authority: encodeGitLensRevisionUriAuthority(metadata),
         path: path,
-        query: ref ? JSON.stringify({ ref }) : undefined,
+        query: label ? JSON.stringify({ ref: label }) : undefined,
     });
     return uri;
 }

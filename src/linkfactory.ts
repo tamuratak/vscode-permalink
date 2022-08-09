@@ -13,17 +13,31 @@ export class LinkToCodeFactory {
         return pathMod.posix.relative(dir.uri.path, uri.path)
     }
 
-    fromStr(linkStr: string): LinkToCode | undefined {
+    fromStr(linkStr: string, doc?: vscode.TextDocument): LinkToCode | undefined {
         let uri: vscode.Uri
         try {
             uri = vscode.Uri.parse(linkStr, true)
         } catch {
             return undefined
         }
-        return this.fromUri(uri)
+        return this.fromUri(uri, doc)
     }
 
-    fromUri(uri: vscode.Uri): LinkToCode | undefined {
+    private guessWorkspace(uri: vscode.Uri, doc?: vscode.TextDocument) {
+        let workspace: vscode.WorkspaceFolder | undefined
+        if (uri.scheme === link.LinkToCodeScheme) {
+            workspace = vscode.workspace.workspaceFolders?.find((ws) => ws.name === uri.authority)
+        }
+        if (!workspace) {
+            workspace = vscode.workspace.getWorkspaceFolder(uri)
+        }
+        if (!workspace && doc) {
+            workspace = vscode.workspace.getWorkspaceFolder(doc.uri)
+        }
+        return workspace
+    }
+
+    fromUri(uri: vscode.Uri, doc?: vscode.TextDocument): LinkToCode | undefined {
         if (uri.scheme !== link.LinkToCodeScheme) {
             return undefined
         }
@@ -36,7 +50,7 @@ export class LinkToCodeFactory {
             end = match[3] ? Number(match[3]) : start
         }
         const authority = uri.authority || undefined
-        const workspace = vscode.workspace.workspaceFolders?.find((ws) => ws.name === authority) || vscode.workspace.getWorkspaceFolder(uri)
+        const workspace = this.guessWorkspace(uri, doc)
         return new LinkToCode(workspace, filePath, start, end, authority)
     }
 

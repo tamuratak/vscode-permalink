@@ -20,7 +20,7 @@ async function printCommitHash() {
     const uri = vscode.window.activeTextEditor?.document.uri
     const workspaceDir = vscode.workspace.workspaceFolders?.[0].uri.fsPath
     if (workspaceDir && uri) {
-        const revUri = getRevisionUri(workspaceDir, uri.path, 'abcd')
+        const revUri = getRevisionUri(workspaceDir, uri.path, '74a5ae3552')
         console.log(JSON.stringify(revUri))
         await vscode.commands.executeCommand('vscode.open', revUri)
         console.log(JSON.stringify(vscode.window.tabGroups.all.map((g) => g.tabs.map((tab) => {

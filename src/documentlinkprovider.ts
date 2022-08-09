@@ -17,7 +17,7 @@ export class LinkToCodeLinkProvider implements vscode.DocumentLinkProvider {
                     break
                 }
                 const linkStr = m[0]
-                const linkToCodeObj = this.extension.linkFactory.fromStr(linkStr)
+                const linkToCodeObj = this.extension.linkFactory.fromStr(linkStr, document)
                 if (linkToCodeObj) {
                     const range = new vscode.Range(i, m.index, i, m.index + linkStr.length)
                     const uriObj = await this.extension.linkResolver.resolveLink(linkToCodeObj)
