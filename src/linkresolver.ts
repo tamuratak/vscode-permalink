@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { getRevisionUri } from './gitlens'
+import { getRevisionUri } from './gitlenslib/gitlens'
 import type {LinkToCode} from './linktocode'
 import { Extension } from './main'
 import type {SnippetResource} from './types/git/types'
