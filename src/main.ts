@@ -84,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
             this.command = new Command(this)
             this.documentUtil = new DocumentUtil(this)
             this.fetcher = new Fetcher(this)
-            this.linkFactory = new LinkToCodeFactory()
+            this.linkFactory = new LinkToCodeFactory(this)
             this.linkResolver = new LinkResolver(this)
             this.snippetFactory = new SnippetFactory(this)
             this.git = new Git()

@@ -2,8 +2,11 @@ import * as pathMod from 'path'
 import * as vscode from 'vscode'
 import * as link from './linktocode'
 import {LinkToCode} from './linktocode'
+import {Extension} from './main'
 
 export class LinkToCodeFactory {
+
+    constructor(private readonly extension: Extension) { }
 
     private relativePath(uri: vscode.Uri) {
         const dir = vscode.workspace.getWorkspaceFolder(uri)
@@ -45,14 +48,29 @@ export class LinkToCodeFactory {
         return new LinkToCode(workspace, filePath, start, end, authority)
     }
 
-    fromSelectionOnDoc(doc: vscode.TextDocument, start: number, end: number, authority?: string): LinkToCode | undefined {
+    fromSelectionOnDoc(doc: vscode.TextDocument, start: number, end: number, commit?: string): LinkToCode | undefined {
+        if (doc.uri.scheme === 'gitlens') {
+            return this.fromSelectionOnGitLensVirtualFile(doc, start, end)
+        }
         const docUri = doc.uri
         const relPath = this.relativePath(docUri)
         if (!relPath) {
             return undefined
         }
         const workspace = vscode.workspace.getWorkspaceFolder(doc.uri)
-        return new LinkToCode(workspace, relPath, start, end, authority)
+        return new LinkToCode(workspace, relPath, start, end, commit)
+    }
+
+    fromSelectionOnGitLensVirtualFile(doc: vscode.TextDocument, start: number, end: number): LinkToCode | undefined {
+        const repoData = this.extension.gitLens.getRevisionUriData(doc.uri)
+        if (repoData) {
+            const workspace = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(repoData.repoPath))
+            if (workspace) {
+                const relativepath = pathMod.posix.relative(workspace.uri.path, doc.uri.path)
+                return new LinkToCode(workspace, relativepath, start, end, repoData.ref)
+            }
+        }
+        return
     }
 
 }

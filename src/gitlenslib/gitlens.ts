@@ -41,8 +41,8 @@ export function decodeUtf8Hex(hex: string): string {
 	return Buffer.from(hex, 'hex').toString('utf8');
 }
 
-export function decodeGitLensRevisionUriAuthority<T>(authority: string): T {
-	return JSON.parse(decodeUtf8Hex(authority)) as T;
+export function decodeGitLensRevisionUriAuthority(authority: string): RevisionUriData {
+	return JSON.parse(decodeUtf8Hex(authority)) as RevisionUriData;
 }
 
 export function encodeGitLensRevisionUriAuthority(metadata: RevisionUriData): string {
