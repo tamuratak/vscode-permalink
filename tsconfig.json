@@ -4,7 +4,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "lib": [
-            "es2017"
+            "es2021"
         ],
         "module": "commonjs",
         "noFallthroughCasesInSwitch": true,
@@ -17,7 +17,7 @@
         "rootDir": ".",
         "sourceMap": true,
         "strict": true,
-        "target": "es2017",
+        "target": "es2021",
         "baseUrl": "./",
         "paths": {
             "git": ["types/git"]
