@@ -1,15 +1,15 @@
 {
-  "name": "linktocode",
-  "displayName": "Link To Code",
+  "name": "permalink",
+  "displayName": "Permalink",
   "version": "0.4.0",
   "publisher": "tamuratak",
   "license": "MIT",
-  "description": "Support workspace-local URI on VS Code",
-  "homepage": "https://github.com/tamuratak/vscode-linktocode",
+  "description": "Permalink for VS Code",
+  "homepage": "https://github.com/tamuratak/vscode-permalink",
   "main": "./out/src/main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tamuratak/vscode-linktocode.git"
+    "url": "https://github.com/tamuratak/vscode-permalink.git"
   },
   "engines": {
     "vscode": "^1.69.0"
@@ -21,21 +21,21 @@
   "contributes": {
     "commands": [
       {
-        "command": "linktocode.copy-line",
+        "command": "permalink.copy-line",
         "title": "Copy Line as Link"
       },
       {
-        "command": "linktocode.paste-link-with-snippet",
+        "command": "permalink.paste-link-with-snippet",
         "title": "Paste Link wit Code Snippet"
       },
       {
-        "command": "linktocode.printCommitHash",
+        "command": "permalink.printCommitHash",
         "title": "Print Commit Hash"
       }
     ],
     "keybindings": [
       {
-        "command": "linktocode.copy-line",
+        "command": "permalink.copy-line",
         "key": "Shift+Ctrl+c",
         "mac": "Shift+Cmd+c",
         "when": "editorTextFocus"
@@ -44,18 +44,18 @@
     "menus": {
       "editor/context": [
         {
-          "command": "linktocode.copy-line",
-          "group": "90_linktocode"
+          "command": "permalink.copy-line",
+          "group": "90_permalink"
         },
         {
-          "command": "linktocode.paste-link-with-snippet",
-          "group": "90_linktocode"
+          "command": "permalink.paste-link-with-snippet",
+          "group": "90_permalink"
         }
       ]
     }
   },
   "activationEvents": [
-    "onCommand:linktocode.copy-line",
+    "onCommand:permalink.copy-line",
     "onLanguage:markdown"
   ],
   "dependencies": {},

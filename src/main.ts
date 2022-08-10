@@ -50,19 +50,19 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.languages.registerHoverProvider({ scheme: 'file', language: 'markdown' }, new HoverOnLinkProvider(extension)),
         vscode.languages.registerDocumentLinkProvider({ scheme: 'file', language: 'markdown' }, new LinkToCodeLinkProvider(extension)),
-        vscode.commands.registerTextEditorCommand('linktocode.copy-line', (editor) => {
+        vscode.commands.registerTextEditorCommand('permalink.copy-line', (editor) => {
             extension.command.copyLine(editor)
         }),
-        vscode.commands.registerTextEditorCommand('linktocode.paste-link-with-snippet', (editor) => {
+        vscode.commands.registerTextEditorCommand('permalink.paste-link-with-snippet', (editor) => {
             extension.command.pasteLinkWithSnippet(editor)
         }),
-        vscode.commands.registerCommand('linktocode.paste-snippet', (obj: SnippetArgs) => {
+        vscode.commands.registerCommand('permalink.paste-snippet', (obj: SnippetArgs) => {
             extension.command.pasteSnippet(obj)
         }),
-        vscode.commands.registerCommand('linktocode.remove-snippet', (obj: TargetRange) => {
+        vscode.commands.registerCommand('permalink.remove-snippet', (obj: TargetRange) => {
             extension.command.removeSnippet(obj)
         }),
-        vscode.commands.registerCommand('linktocode.printCommitHash', () => {
+        vscode.commands.registerCommand('permalink.printCommitHash', () => {
            printCommitHash()
         })
     )
