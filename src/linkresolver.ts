@@ -29,10 +29,7 @@ export class LinkResolver {
         if (link.workspace) {
             return this.findFile(link, link.workspace)
         }
-        for(const folder of vscode.workspace.workspaceFolders || []) {
-            return this.findFile(link, folder)
-        }
-        return undefined
+        return
     }
 
     private async findFile(link: Permalink, dir: vscode.WorkspaceFolder) {

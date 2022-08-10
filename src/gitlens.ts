@@ -9,7 +9,7 @@ export class GitLens {
 
     async getGitLensUri(link: Permalink) {
         if (link.commit) {
-            const workspace = link.workspace || await this.extension.git.findWorkspaceFolder(link.commit)
+            const workspace = await this.extension.git.findWorkspaceFolder(link.commit)
             if (workspace) {
                 return getRevisionUri(workspace.uri.fsPath, link.path, link.commit)
             }
