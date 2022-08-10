@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import type { LinkBlock } from './documentutil'
 import type { LinkToCode } from './linktocode'
 import type { Extension } from './main'
-import type { SnippetArgs, TargetRange } from './types/git/types'
+import type { SnippetArgs, TargetRange } from './types/types'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
 

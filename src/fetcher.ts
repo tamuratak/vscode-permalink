@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import { LinkToCode } from './linktocode'
 import type { Extension } from './main'
-import type { SnippetResource } from './types/git/types'
+import type { SnippetResource } from './types/types'
 
 export class Fetcher {
 

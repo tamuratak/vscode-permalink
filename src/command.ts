@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import { getFileExt } from './utils/fileext'
 import type { Extension } from './main'
-import type { SnippetResource, SnippetArgs, TargetRange } from './types/git/types'
+import type { SnippetResource, SnippetArgs, TargetRange } from './types/types'
 import * as utils from './utils/utils'
 
 export class Command {
