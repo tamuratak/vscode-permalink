@@ -1,7 +1,7 @@
 import * as pathMod from 'path'
 import * as vscode from 'vscode'
-import * as link from './linktocode'
-import { LinkToCode } from './linktocode'
+import * as link from './permalink'
+import { Permalink } from './permalink'
 import type { Extension } from './main'
 
 export class LinkToCodeFactory {
@@ -16,7 +16,7 @@ export class LinkToCodeFactory {
         return pathMod.posix.relative(dir.uri.path, uri.path)
     }
 
-    fromLinkStr(linkStr: string, doc?: vscode.TextDocument): LinkToCode | undefined {
+    fromLinkStr(linkStr: string, doc?: vscode.TextDocument): Permalink | undefined {
         let uri: vscode.Uri
         try {
             uri = vscode.Uri.parse(linkStr, true)
@@ -31,8 +31,8 @@ export class LinkToCodeFactory {
         return workspace
     }
 
-    private fromUri(uri: vscode.Uri, doc?: vscode.TextDocument): LinkToCode | undefined {
-        if (uri.scheme !== link.LinkToCodeScheme) {
+    private fromUri(uri: vscode.Uri, doc?: vscode.TextDocument): Permalink | undefined {
+        if (uri.scheme !== link.PermalinkScheme) {
             return undefined
         }
         const filePath = uri.path.replace(/^\//, '')
@@ -45,10 +45,10 @@ export class LinkToCodeFactory {
         }
         const authority = uri.authority || undefined
         const workspace = this.guessWorkspace(uri, doc)
-        return new LinkToCode(workspace, filePath, start, end, authority)
+        return new Permalink(workspace, filePath, start, end, authority)
     }
 
-    fromSelectionOnDoc(doc: vscode.TextDocument, start: number, end: number, commit?: string): LinkToCode | undefined {
+    fromSelectionOnDoc(doc: vscode.TextDocument, start: number, end: number, commit?: string): Permalink | undefined {
         if (doc.uri.scheme === 'gitlens') {
             return this.fromSelectionOnGitLensVirtualFile(doc, start, end)
         }
@@ -58,16 +58,16 @@ export class LinkToCodeFactory {
             return undefined
         }
         const workspace = vscode.workspace.getWorkspaceFolder(doc.uri)
-        return new LinkToCode(workspace, relPath, start, end, commit)
+        return new Permalink(workspace, relPath, start, end, commit)
     }
 
-    fromSelectionOnGitLensVirtualFile(doc: vscode.TextDocument, start: number, end: number): LinkToCode | undefined {
+    fromSelectionOnGitLensVirtualFile(doc: vscode.TextDocument, start: number, end: number): Permalink | undefined {
         const repoData = this.extension.gitLens.getRevisionUriData(doc.uri)
         if (repoData) {
             const workspace = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(repoData.repoPath))
             if (workspace) {
                 const relativepath = pathMod.posix.relative(workspace.uri.path, doc.uri.path)
-                return new LinkToCode(workspace, relativepath, start, end, repoData.ref)
+                return new Permalink(workspace, relativepath, start, end, repoData.ref)
             }
         }
         return

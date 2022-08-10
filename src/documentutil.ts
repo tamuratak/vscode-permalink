@@ -1,10 +1,10 @@
 import * as vscode from 'vscode'
-import * as linkMod from './linktocode'
-import type { LinkToCode } from './linktocode'
+import * as linkMod from './permalink'
+import type { Permalink } from './permalink'
 import type { Extension } from './main'
 
 export type LinkBlock = {
-    link: LinkToCode,
+    link: Permalink,
     linkStrRange: vscode.Range,
     codeBlockRange?: vscode.Range
 }
@@ -14,7 +14,7 @@ export class DocumentUtil {
     constructor(private readonly extension: Extension) {}
 
     getLinkAtPosition(document: vscode.TextDocument, position: vscode.Position): LinkBlock | undefined {
-        const linkStrRange = document.getWordRangeAtPosition(position, linkMod.LinkToCodeRegExp)
+        const linkStrRange = document.getWordRangeAtPosition(position, linkMod.PermalinkRegExp)
         if (!linkStrRange) {
             return undefined
         }

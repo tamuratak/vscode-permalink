@@ -1,10 +1,10 @@
 import type { WorkspaceFolder } from 'vscode'
 
-export const LinkToCodeScheme = 'workspace'
+export const PermalinkScheme = 'workspace'
 // workspace://workspace_name/relative_path_to_file#LXX-YY
-export const LinkToCodeRegExp = /workspace:([-_~a-zA-Z0-9/%@\\.]+)(?:#L(\d+)(-(\d+))?)?/
+export const PermalinkRegExp = /workspace:([-_~a-zA-Z0-9/%@\\.]+)(?:#L(\d+)(-(\d+))?)?/
 
-export class LinkToCode {
+export class Permalink {
     readonly targetCode?: {
         readonly start: number,
         readonly end: number
@@ -39,7 +39,7 @@ export class LinkToCode {
     }
 
     toString() {
-        return `${LinkToCodeScheme}://${this.commit}/${this.path}#${this.fragment}`
+        return `${PermalinkScheme}://${this.commit}/${this.path}#${this.fragment}`
     }
 
 }

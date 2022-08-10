@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import type { LinkBlock } from './documentutil'
-import type { LinkToCode } from './linktocode'
+import type { Permalink } from './permalink'
 import type { Extension } from './main'
 import type { SnippetArgs, TargetRange } from './types/types'
 
@@ -22,7 +22,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         return this.hoverForFetchCommand(linkBlk, position)
     }
 
-    private async getFileUri(link: LinkToCode) {
+    private async getFileUri(link: Permalink) {
         const uriObj = await this.extension.linkResolver.resolveLink(link)
         const fileUri = uriObj?.with({ fragment: link.fragment })
         if (!fileUri) {

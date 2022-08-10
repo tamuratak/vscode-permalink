@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
-import * as link from './linktocode'
+import * as link from './permalink'
 import type { Extension } from './main'
 
 export class LinkToCodeLinkProvider implements vscode.DocumentLinkProvider {
-    private readonly linkReg = new RegExp(link.LinkToCodeRegExp.source, 'g')
+    private readonly linkReg = new RegExp(link.PermalinkRegExp.source, 'g')
 
     constructor(private readonly extension: Extension) { }
 

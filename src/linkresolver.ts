@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { LinkToCode } from './linktocode'
+import type { Permalink } from './permalink'
 import type { Extension } from './main'
 import type { SnippetResource } from './types/types'
 
@@ -7,7 +7,7 @@ export class LinkResolver {
 
     constructor(private readonly extension: Extension) { }
 
-    async resolveSnippetResource(link: LinkToCode): Promise<SnippetResource | undefined> {
+    async resolveSnippetResource(link: Permalink): Promise<SnippetResource | undefined> {
         if (!link.targetCode) {
             return undefined
         }
@@ -22,7 +22,7 @@ export class LinkResolver {
         }
     }
 
-    async resolveLink(link: LinkToCode): Promise<vscode.Uri | undefined> {
+    async resolveLink(link: Permalink): Promise<vscode.Uri | undefined> {
         if (link.commit) {
             return this.extension.gitLens.getGitLensUri(link)
         }
@@ -35,7 +35,7 @@ export class LinkResolver {
         return undefined
     }
 
-    private async findFile(link: LinkToCode, dir: vscode.WorkspaceFolder) {
+    private async findFile(link: Permalink, dir: vscode.WorkspaceFolder) {
         const uri = vscode.Uri.joinPath(dir.uri, '.', link.path)
         try {
             await vscode.workspace.fs.stat(uri)

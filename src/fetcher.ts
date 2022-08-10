@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { LinkToCode } from './linktocode'
+import type { Permalink } from './permalink'
 import type { Extension } from './main'
 import type { SnippetResource } from './types/types'
 
@@ -7,7 +7,7 @@ export class Fetcher {
 
     constructor(private readonly extension: Extension) {}
 
-    async getSnippet(link: LinkToCode): Promise<string | undefined> {
+    async getSnippet(link: Permalink): Promise<string | undefined> {
         const resource = await this.extension.linkResolver.resolveSnippetResource(link)
         if (!resource) {
             return undefined
