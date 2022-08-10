@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import type {Uri, WorkspaceFolder} from 'vscode'
-import type {API, Commit, GitExtension, Repository} from './types/git/git'
+import type {API, Commit, GitExtension, Repository} from 'git'
 
 export class Git {
     #gitApi: API | undefined

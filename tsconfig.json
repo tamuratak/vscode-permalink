@@ -18,7 +18,10 @@
         "sourceMap": true,
         "strict": true,
         "target": "es2017",
-        "baseUrl": "./"
+        "baseUrl": "./",
+        "paths": {
+            "git": ["types/git"]
+        }
     },
     "exclude": [
         "node_modules",
