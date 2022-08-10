@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { LinkToCode } from './linktocode'
+import type { LinkToCode } from './linktocode'
 import type { Extension } from './main'
 import type { SnippetResource } from './types/types'
 

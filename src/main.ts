@@ -7,15 +7,13 @@ import { Fetcher } from './fetcher'
 import { LinkToCodeFactory } from './linkfactory'
 import { LinkResolver } from './linkresolver'
 import { SnippetFactory } from './snippet'
-import type { SnippetArgs, TargetRange } from './types/types'
-import { GitExtension } from 'git'
-import path from 'path'
-import { getRevisionUri } from './gitlenslib/uriutils'
 import { Git } from './git'
 import { GitLens } from './gitlens'
+import type { SnippetArgs, TargetRange } from './types/types'
 
 
 async function printCommitHash() {
+    /*
     const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports
 	const git = gitExtension?.getAPI(1)
     const uri = vscode.window.activeTextEditor?.document.uri
@@ -41,6 +39,7 @@ async function printCommitHash() {
         commit = await repo?.getCommit('aef51adb2dba')
         console.log(commit?.hash)
     }
+    */
     const wspUri = vscode.Uri.parse('workspace://uu@aaa/sr!"#$%&\'@[{`]:;l}*+_?>_/.()0=~|c/main.ts?c=abd123', true)
     console.log(wspUri.toJSON())
     console.log(wspUri.toString())

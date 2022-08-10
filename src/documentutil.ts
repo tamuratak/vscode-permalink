@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import * as linkMod from './linktocode'
-import { LinkToCode } from './linktocode'
+import type { LinkToCode } from './linktocode'
 import type { Extension } from './main'
 
 export type LinkBlock = {
