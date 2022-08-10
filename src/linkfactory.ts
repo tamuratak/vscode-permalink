@@ -16,14 +16,14 @@ export class LinkToCodeFactory {
         return pathMod.posix.relative(dir.uri.path, uri.path)
     }
 
-    fromLinkStr(linkStr: string, doc?: vscode.TextDocument): Permalink | undefined {
+    fromPermalinkStr(linkStr: string, doc?: vscode.TextDocument): Permalink | undefined {
         let uri: vscode.Uri
         try {
             uri = vscode.Uri.parse(linkStr, true)
         } catch {
             return undefined
         }
-        return this.fromUri(uri, doc)
+        return this.fromPermalinkUri(uri, doc)
     }
 
     private guessWorkspace(uri: vscode.Uri, doc?: vscode.TextDocument) {
@@ -31,7 +31,7 @@ export class LinkToCodeFactory {
         return workspace
     }
 
-    private fromUri(uri: vscode.Uri, doc?: vscode.TextDocument): Permalink | undefined {
+    private fromPermalinkUri(uri: vscode.Uri, doc?: vscode.TextDocument): Permalink | undefined {
         if (uri.scheme !== link.PermalinkScheme) {
             return undefined
         }

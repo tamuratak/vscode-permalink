@@ -1,8 +1,8 @@
 import type { WorkspaceFolder } from 'vscode'
 
 export const PermalinkScheme = 'workspace'
-// workspace://workspace_name/relative_path_to_file#LXX-YY
-export const PermalinkRegExp = /workspace:([-_~a-zA-Z0-9/%@\\.]+)(?:#L(\d+)(-(\d+))?)?/
+// workspace://commit_hash/relative_path_to_file#LXX-YY
+export const PermalinkRegExp = /workspace:\/\/([-_~a-zA-Z0-9/%@\\.]+)(?:#L(\d+)(-(\d+))?)?/
 
 export class Permalink {
     readonly targetCode?: {

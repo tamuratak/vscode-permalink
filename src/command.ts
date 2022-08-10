@@ -25,7 +25,7 @@ export class Command {
     async pasteLinkWithSnippet(editor: vscode.TextEditor) {
         const selection = editor.selection
         const linkStr = await vscode.env.clipboard.readText()
-        const link = this.extension.linkFactory.fromLinkStr(linkStr)
+        const link = this.extension.linkFactory.fromPermalinkStr(linkStr)
         if (!link) {
             return undefined
         }
