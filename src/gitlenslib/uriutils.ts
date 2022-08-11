@@ -26,18 +26,17 @@ SOFTWARE.
 */
 
 import { Uri } from 'vscode'
-import { isAbsolute as _isAbsolute } from 'path'
 
 export interface RevisionUriData {
 	ref?: string,
 	repoPath: string
 }
 
-export function encodeUtf8Hex(s: string): string {
+function encodeUtf8Hex(s: string): string {
 	return Buffer.from(s, 'utf8').toString('hex')
 }
 
-export function decodeUtf8Hex(hex: string): string {
+function decodeUtf8Hex(hex: string): string {
 	return Buffer.from(hex, 'hex').toString('utf8')
 }
 
@@ -49,8 +48,8 @@ export function encodeGitLensRevisionUriAuthority(metadata: RevisionUriData): st
 	return encodeUtf8Hex(JSON.stringify(metadata))
 }
 
-export const isWindows = process.platform === 'win32'
-export const isLinux = process.platform === 'linux'
+const isWindows = process.platform === 'win32'
+const isLinux = process.platform === 'linux'
 
 const slash = 47 //slash;
 
@@ -82,7 +81,7 @@ function maybeUri(path: string): boolean {
 }
 
 function isAbsolute(path: string): boolean {
-	return !maybeUri(path) && _isAbsolute(path)
+	return !maybeUri(path)
 }
 
 function commonBaseIndex(s1: string, s2: string, delimiter: string, ignoreCase?: boolean): number {
@@ -175,7 +174,7 @@ function isMatch(regex: RegExp, ref: string | undefined) {
 	return !ref ? false : regex.test(ref)
 }
 
-export function isSha(ref: string) {
+function isSha(ref: string) {
     return isMatch(shaRegex, ref)
 }
 
