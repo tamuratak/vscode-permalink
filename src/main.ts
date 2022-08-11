@@ -4,7 +4,7 @@ import { DocumentUtil } from './documentutil'
 import { HoverOnLinkProvider } from './hoverprovider'
 import { LinkToCodeLinkProvider } from './documentlinkprovider'
 import { Fetcher } from './fetcher'
-import { LinkToCodeFactory } from './linkfactory'
+import { LinkFactory } from './linkfactory'
 import { LinkResolver } from './linkresolver'
 import { SnippetFactory } from './snippet'
 import { Git } from './git'
@@ -70,7 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
     export class Extension {
-        readonly linkFactory: LinkToCodeFactory
+        readonly linkFactory: LinkFactory
         readonly linkResolver: LinkResolver
         readonly command: Command
         readonly documentUtil: DocumentUtil
@@ -83,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
             this.command = new Command(this)
             this.documentUtil = new DocumentUtil(this)
             this.fetcher = new Fetcher(this)
-            this.linkFactory = new LinkToCodeFactory(this)
+            this.linkFactory = new LinkFactory(this)
             this.linkResolver = new LinkResolver(this)
             this.snippetFactory = new SnippetFactory(this)
             this.git = new Git()

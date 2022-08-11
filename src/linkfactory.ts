@@ -1,19 +1,29 @@
-import * as pathMod from 'path'
 import * as vscode from 'vscode'
-import * as link from './permalink'
-import { Permalink } from './permalink'
+import { Permalink, PermalinkScheme } from './permalink'
 import type { Extension } from './main'
 
-export class LinkToCodeFactory {
+export class LinkFactory {
 
     constructor(private readonly extension: Extension) { }
 
-    private relativePath(uri: vscode.Uri) {
-        const dir = vscode.workspace.getWorkspaceFolder(uri)
+    private removeFirstSlash(path: string): string {
+        if (path.startsWith('/')) {
+            return path.slice(1)
+        } else {
+            return path
+        }
+    }
+
+    private relativePath(argWorkspace: vscode.WorkspaceFolder | undefined, uri: vscode.Uri): string | undefined {
+        const dir = argWorkspace || vscode.workspace.getWorkspaceFolder(uri)
         if (!dir) {
             return undefined
         }
-        return pathMod.posix.relative(dir.uri.path, uri.path)
+        if (!uri.path.startsWith(dir.uri.path)) {
+            return undefined
+        }
+        const relativePath = uri.path.slice(dir.uri.path.length)
+        return this.removeFirstSlash(relativePath)
     }
 
     fromPermalinkStr(linkStr: string, doc?: vscode.TextDocument): Permalink | undefined {
@@ -32,10 +42,10 @@ export class LinkToCodeFactory {
     }
 
     private fromPermalinkUri(uri: vscode.Uri, doc?: vscode.TextDocument): Permalink | undefined {
-        if (uri.scheme !== link.PermalinkScheme) {
+        if (uri.scheme !== PermalinkScheme) {
             return undefined
         }
-        const filePath = uri.path.replace(/^\//, '')
+        const filePath = this.removeFirstSlash(uri.path)
         let start: number | undefined
         let end: number | undefined
         const match = /L(\d+)([-,](\d+))?/.exec(uri.fragment)
@@ -53,7 +63,7 @@ export class LinkToCodeFactory {
             return this.fromSelectionOnGitLensVirtualFile(doc, start, end)
         }
         const docUri = doc.uri
-        const relPath = this.relativePath(docUri)
+        const relPath = this.relativePath(undefined, docUri)
         if (!relPath) {
             return undefined
         }
@@ -61,13 +71,15 @@ export class LinkToCodeFactory {
         return new Permalink(workspace, relPath, start, end, commit)
     }
 
-    fromSelectionOnGitLensVirtualFile(doc: vscode.TextDocument, start: number, end: number): Permalink | undefined {
+    private fromSelectionOnGitLensVirtualFile(doc: vscode.TextDocument, start: number, end: number): Permalink | undefined {
         const repoData = this.extension.gitLens.getRevisionUriData(doc.uri)
         if (repoData) {
             const workspace = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(repoData.repoPath))
             if (workspace) {
-                const relativepath = pathMod.posix.relative(workspace.uri.path, doc.uri.path)
-                return new Permalink(workspace, relativepath, start, end, repoData.ref)
+                const relativepath = this.relativePath(workspace, doc.uri)
+                if (relativepath) {
+                    return new Permalink(workspace, relativepath, start, end, repoData.ref)
+                }
             }
         }
         return
