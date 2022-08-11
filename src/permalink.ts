@@ -11,7 +11,7 @@ export class Permalink {
     }
 
     constructor(
-        public workspace: WorkspaceFolder | undefined,
+        readonly workspace: WorkspaceFolder | undefined,
         readonly path: string,
         start?: number,
         end?: number,
