@@ -54,8 +54,8 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         const codeBlock = await this.extension.fetcher.getSnippet(link)
         if (codeBlock) {
             md.appendCodeblock(codeBlock, 'ts')
+            md.appendMarkdown('---\n')
         }
-        md.appendMarkdown('---\n')
         md.appendMarkdown(`[Fetch](${cmdlink}) `)
         md.appendText(`(${this.formatUri(fileUri)})\n`)
         md.isTrusted = true
