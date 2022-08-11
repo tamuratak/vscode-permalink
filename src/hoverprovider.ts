@@ -33,8 +33,9 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
 
     private formatUri(uri: vscode.Uri): string {
         if (uri.scheme === 'gitlens') {
-            const tmp = uri.with({authority: '...'})
-            return tmp.toString()
+            const beg = Math.max(uri.path.length - 20, 0)
+            const path = uri.path.slice(beg)
+            return `${uri.scheme}://...${path}#${uri.fragment}`
         }
         return uri.toString()
     }
@@ -50,8 +51,13 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
             return undefined
         }
         const md = new vscode.MarkdownString(undefined, true)
-        md.appendCodeblock(this.formatUri(fileUri) + '\n')
-        md.appendMarkdown(`[Fetch](${cmdlink})`)
+        const codeBlock = await this.extension.fetcher.getSnippet(link)
+        if (codeBlock) {
+            md.appendCodeblock(codeBlock, 'ts')
+        }
+        md.appendMarkdown('---\n')
+        md.appendMarkdown(`[Fetch](${cmdlink}) `)
+        md.appendText(`(${this.formatUri(fileUri)})\n`)
         md.isTrusted = true
         return new vscode.Hover(md, linkBlk.linkStrRange)
     }
@@ -76,7 +82,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
                 end: { line: position.line + 1, character: 0 }
             }
         }
-        const cmdlink = vscode.Uri.parse('command:linktocode.paste-snippet').with({
+        const cmdlink = vscode.Uri.parse('command:permalink.paste-snippet').with({
             query: JSON.stringify(args)
         })
         return cmdlink
@@ -96,8 +102,8 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
             return undefined
         }
         const md = new vscode.MarkdownString(undefined, true)
-        md.appendCodeblock(this.formatUri(fileUri) + '\n')
-        md.appendMarkdown(`[Remove](${removeCmd})`)
+        md.appendMarkdown(`[Remove](${removeCmd}) `)
+        md.appendText(`(${this.formatUri(fileUri)})\n`)
         md.isTrusted = true
         return new vscode.Hover(md, linkBlk.linkStrRange)
     }
@@ -110,7 +116,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
             start: { line: linkBlk.codeBlockRange.start.line, character: 0 },
             end: { line: linkBlk.codeBlockRange.end.line + 1, character: 0 }
         }
-        const cmdlink = vscode.Uri.parse('command:linktocode.remove-snippet').with({
+        const cmdlink = vscode.Uri.parse('command:permalink.remove-snippet').with({
             query: JSON.stringify(args)
         })
         return cmdlink
