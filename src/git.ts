@@ -1,15 +1,21 @@
 import * as vscode from 'vscode'
 import type {Uri, WorkspaceFolder} from 'vscode'
 import type {API, Commit, GitExtension, Repository} from 'git'
+import { sleep } from './utils/utils'
 
 export class Git {
     #gitApi: API | undefined
     private workspaceRepositoryMap = new Map<string, Repository>()
     private commitWorkspaceMap = new Map<string, WorkspaceFolder>()
+    private alreadySleep = false
 
-    private get gitApi() {
+    private async gitApi() {
         if (this.#gitApi) {
             return this.#gitApi
+        }
+        if (!this.alreadySleep) {
+            await sleep(2000)
+            this.alreadySleep = true
         }
         const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports
         this.#gitApi = gitExtension?.getAPI(1)
@@ -22,7 +28,8 @@ export class Git {
         if (repo) {
             return repo
         }
-        repo = await this.gitApi?.init(workspace.uri) || undefined
+        const api = await this.gitApi()
+        repo = await api?.init(workspace.uri) || undefined
         if (repo) {
             this.workspaceRepositoryMap.set(uri, repo)
         }
