@@ -15,7 +15,6 @@
     "vscode": "^1.69.0"
   },
   "extensionDependencies": [
-    "vscode.git",
     "eamodio.gitlens"
   ],
   "contributes": {
