@@ -32,12 +32,9 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
     }
 
     private formatUri(uri: vscode.Uri): string {
-        if (uri.scheme === 'gitlens') {
-            const beg = Math.max(uri.path.length - 20, 0)
-            const path = uri.path.slice(beg)
-            return `${uri.scheme}://...${path}#${uri.fragment}`
-        }
-        return uri.toString()
+        const beg = Math.max(uri.path.length - 20, 0)
+        const path = uri.path.slice(beg)
+        return `${uri.scheme}://...${path}#${uri.fragment}`
     }
 
     private async hoverForFetchCommand(linkBlk: LinkBlock, position: vscode.Position) {
@@ -55,9 +52,9 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         if (codeBlock) {
             md.appendCodeblock(codeBlock, 'ts')
             md.appendMarkdown('---\n')
+            md.appendMarkdown(`[Fetch](${cmdlink}) `)
+            md.appendText(`(${this.formatUri(fileUri)})\n`)
         }
-        md.appendMarkdown(`[Fetch](${cmdlink}) `)
-        md.appendText(`(${this.formatUri(fileUri)})\n`)
         md.isTrusted = true
         return new vscode.Hover(md, linkBlk.linkStrRange)
     }
