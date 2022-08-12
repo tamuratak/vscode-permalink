@@ -47,16 +47,20 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         if (!cmdlink) {
             return undefined
         }
-        const md = new vscode.MarkdownString(undefined, true)
+        const mdArray: vscode.MarkdownString[] = []
         const codeBlock = await this.extension.fetcher.getSnippet(link)
-        if (codeBlock) {
+        if (codeBlock === '') {
+            mdArray.push(new vscode.MarkdownString('$(info) The code block is an empty line.', true))
+        } else if (codeBlock) {
+            const md = new vscode.MarkdownString(undefined)
             md.appendCodeblock(codeBlock, 'ts')
-            md.appendMarkdown('---\n')
-            md.appendMarkdown(`[Fetch](${cmdlink}) `)
-            md.appendText(`(${this.formatUri(fileUri)})\n`)
+            mdArray.push(md)
+            const fetchMd = new vscode.MarkdownString(`[Fetch](${cmdlink}) `)
+            fetchMd.isTrusted = true
+            fetchMd.appendText(`(${this.formatUri(fileUri)})\n`)
+            mdArray.push(fetchMd)
         }
-        md.isTrusted = true
-        return new vscode.Hover(md, linkBlk.linkStrRange)
+        return new vscode.Hover(mdArray, linkBlk.linkStrRange)
     }
 
     private async commandLinkToFetch(linkBlk: LinkBlock, position: vscode.Position): Promise<vscode.Uri | undefined> {
