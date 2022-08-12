@@ -1,25 +1,26 @@
 import * as vscode from 'vscode'
-import type { LinkBlock } from './documentutil'
+import { DocumentUtil, LinkBlock } from './hoverproviderlib/documentutil'
 import type { Permalink } from './permalink'
 import type { Extension } from './main'
 import type { SnippetArgs, TargetRange } from './types/types'
 
 export class HoverOnLinkProvider implements vscode.HoverProvider {
+    private documentUtil: DocumentUtil
 
-    constructor(private readonly extension: Extension) {}
+    constructor(private readonly extension: Extension) {
+        this.documentUtil = new DocumentUtil(extension)
+    }
 
     async provideHover(document: vscode.TextDocument, position: vscode.Position) {
-        const linkBlk = this.extension.documentUtil.getLinkAtPosition(document, position)
+        const linkBlk = this.documentUtil.getLinkAtPosition(document, position)
         if (!linkBlk) {
             return undefined
         }
         if (linkBlk.codeBlockRange) {
-            const hov = await this.hoveForRemoveCommand(linkBlk)
-            if (hov) {
-                return hov
-            }
+            return this.hoveForRemoveCommand(linkBlk)
+        } else {
+            return this.hoverForFetchCommand(linkBlk, position)
         }
-        return this.hoverForFetchCommand(linkBlk, position)
     }
 
     private async getFileUri(link: Permalink) {

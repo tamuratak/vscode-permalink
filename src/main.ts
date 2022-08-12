@@ -1,6 +1,5 @@
 import * as vscode from 'vscode'
 import { Command } from './command'
-import { DocumentUtil } from './documentutil'
 import { HoverOnLinkProvider } from './hoverprovider'
 import { LinkToCodeLinkProvider } from './documentlinkprovider'
 import { Fetcher } from './fetcher'
@@ -46,7 +45,6 @@ export function activate(context: vscode.ExtensionContext) {
         readonly linkFactory: LinkFactory
         readonly linkResolver: LinkResolver
         readonly command: Command
-        readonly documentUtil: DocumentUtil
         readonly fetcher: Fetcher
         readonly snippetFactory: SnippetFactory
         readonly git: Git
@@ -54,7 +52,6 @@ export function activate(context: vscode.ExtensionContext) {
 
         constructor() {
             this.command = new Command(this)
-            this.documentUtil = new DocumentUtil(this)
             this.fetcher = new Fetcher(this)
             this.linkFactory = new LinkFactory(this)
             this.linkResolver = new LinkResolver(this)

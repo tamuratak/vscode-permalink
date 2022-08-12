@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
-import * as linkMod from './permalink'
-import type { Permalink } from './permalink'
-import type { Extension } from './main'
+import * as linkMod from '../permalink'
+import type { Permalink } from '../permalink'
+import type { Extension } from '../main'
 
 export type LinkBlock = {
     link: Permalink,
