@@ -38,6 +38,12 @@
         "key": "Shift+Ctrl+c",
         "mac": "Shift+Cmd+c",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "permalink.paste-link-with-snippet",
+        "key": "Shift+Ctrl+v",
+        "mac": "Shift+Cmd+v",
+        "when": "editorTextFocus"
       }
     ],
     "menus": {
