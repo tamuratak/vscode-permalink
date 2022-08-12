@@ -5,7 +5,7 @@ import { LinkToCodeLinkProvider } from './documentlinkprovider'
 import { Fetcher } from './fetcher'
 import { LinkFactory } from './linkfactory'
 import { LinkResolver } from './linkresolver'
-import { SnippetFactory } from './snippet'
+import { SnippetFactory } from './commandlib/snippet'
 import { Git } from './git'
 import { GitLens } from './gitlens'
 import type { SnippetArgs, TargetRange } from './types/types'
@@ -46,7 +46,6 @@ export function activate(context: vscode.ExtensionContext) {
         readonly linkResolver: LinkResolver
         readonly command: Command
         readonly fetcher: Fetcher
-        readonly snippetFactory: SnippetFactory
         readonly git: Git
         readonly gitLens: GitLens
 
@@ -55,7 +54,6 @@ export function activate(context: vscode.ExtensionContext) {
             this.fetcher = new Fetcher(this)
             this.linkFactory = new LinkFactory(this)
             this.linkResolver = new LinkResolver(this)
-            this.snippetFactory = new SnippetFactory(this)
             this.git = new Git()
             this.gitLens = new GitLens(this)
         }

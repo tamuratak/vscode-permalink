@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
-import { getFileExt } from './utils/fileext'
-import type { Extension } from './main'
-import type { SnippetResource } from './types/types'
+import { getFileExt } from '../utils/fileext'
+import type { Extension } from '../main'
+import type { SnippetResource } from '../types/types'
 
 export class SnippetFactory {
 

@@ -3,10 +3,14 @@ import { getFileExt } from './utils/fileext'
 import type { Extension } from './main'
 import type { SnippetResource, SnippetArgs, TargetRange } from './types/types'
 import * as utils from './utils/utils'
+import { SnippetFactory } from './commandlib/snippet'
 
 export class Command {
+    readonly snippetFactory: SnippetFactory
 
-    constructor(private readonly extension: Extension) {}
+    constructor(private readonly extension: Extension) {
+        this.snippetFactory = new SnippetFactory(extension)
+    }
 
     async copyLine(editor: vscode.TextEditor) {
         const doc = editor.document
@@ -57,7 +61,7 @@ export class Command {
             start: args.resource.start,
             end: args.resource.end
         }
-        let snippet = (await this.extension.snippetFactory.createMarkdown(snippeResource)).value.trimLeft()
+        let snippet = (await this.snippetFactory.createMarkdown(snippeResource)).value.trimLeft()
         if (editor.document.lineCount <= args.targetRange.start.line) {
             snippet = '\n' + snippet
         }
