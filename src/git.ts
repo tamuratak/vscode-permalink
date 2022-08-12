@@ -63,4 +63,14 @@ export class Git {
         return
     }
 
+    async getLatestCommit(uri: Uri ): Promise<Commit | undefined> {
+        const workspace = vscode.workspace.getWorkspaceFolder(uri)
+        if (workspace) {
+            const repo = await this.getRepository(workspace)
+            const commits = await repo?.log({path: uri.fsPath, maxEntries: 1})
+            return commits?.[0]
+        }
+        return
+    }
+
 }
