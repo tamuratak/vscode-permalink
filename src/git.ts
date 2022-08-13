@@ -44,7 +44,7 @@ export class Git {
         const dirs = vscode.workspace.workspaceFolders || []
         for (const dir of dirs) {
             const repo = await this.getRepository(dir)
-            const commitObj = repo?.getCommit(commit)
+            const commitObj = await repo?.getCommit(commit)
             if (commitObj) {
                 this.commitWorkspaceMap.set(commit, dir)
                 return dir
