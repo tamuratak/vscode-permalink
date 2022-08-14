@@ -42,7 +42,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         const link = linkBlk.link
         const fileUri = await this.getFileUri(link)
         if (!fileUri) {
-            return undefined
+            return new vscode.Hover(new vscode.MarkdownString('$(info) The file is not found.', true))
         }
         const cmdlink = await this.commandLinkToFetch(linkBlk, position)
         if (!cmdlink) {
@@ -97,7 +97,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         const link = linkBlk.link
         const fileUri = await this.getFileUri(link)
         if (!fileUri) {
-            return undefined
+            return new vscode.Hover(new vscode.MarkdownString('$(info) The file is not found.', true))
         }
         const removeCmd = this.commandLinkToRemove(linkBlk)
         if (!removeCmd) {
@@ -107,7 +107,7 @@ export class HoverOnLinkProvider implements vscode.HoverProvider {
         md.appendMarkdown(`[Remove](${removeCmd}) `)
         md.appendText(`(${this.formatUri(fileUri)})\n`)
         md.isTrusted = true
-        return new vscode.Hover(md, linkBlk.linkStrRange)
+        return new vscode.Hover(md, new vscode.Range(linkBlk.linkStrRange.start, linkBlk.codeBlockRange.end))
     }
 
     private commandLinkToRemove(linkBlk: LinkBlock): vscode.Uri | undefined {
