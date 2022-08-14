@@ -1,7 +1,7 @@
 {
   "name": "permalink",
   "displayName": "Permalink",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "publisher": "tamuratak",
   "license": "MIT",
   "description": "Permalink for VS Code",
