@@ -16,10 +16,19 @@ export class Fetcher {
     }
 
     async getSnippetFromUri(resource: SnippetResource): Promise<string> {
-        const doc = (await vscode.workspace.fs.readFile(resource.uri)).toString()
-        const arry = doc.split('\n').slice(resource.start - 1, resource.end)
-        const snippet = arry.join('\n')
-        return snippet
+        try {
+            const doc = (await vscode.workspace.fs.readFile(resource.uri)).toString()
+            const arry = doc.split('\n').slice(resource.start - 1, resource.end)
+            const snippet = arry.join('\n')
+            return snippet
+        } catch (e) {
+            if (e instanceof Error) {
+                console.log(resource.uri.toString())
+                console.log(e.message)
+                console.log(e.stack)
+            }
+            throw e
+        }
     }
 
 }

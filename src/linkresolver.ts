@@ -24,7 +24,8 @@ export class LinkResolver {
 
     async resolveLink(link: Permalink): Promise<vscode.Uri | undefined> {
         if (link.commit) {
-            return this.extension.gitLens.getGitLensUri(link)
+            // return this.extension.gitLens.getGitLensUri(link)
+            return this.extension.git.getGitExtensionUri(link)
         }
         if (link.workspace) {
             return this.findFile(link, link.workspace)

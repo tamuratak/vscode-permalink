@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import type {Uri, WorkspaceFolder} from 'vscode'
 import type {API, Commit, GitExtension, Repository} from 'git'
 import { sleep } from './utils/utils'
+import { Permalink } from './permalink'
 
 export class Git {
     #gitApi: API | undefined
@@ -48,6 +49,19 @@ export class Git {
             if (commitObj) {
                 this.commitWorkspaceMap.set(commit, dir)
                 return dir
+            }
+        }
+        return
+    }
+
+    async getGitExtensionUri(link: Permalink): Promise<vscode.Uri | undefined> {
+        const api = await this.gitApi()
+        if (link.commit) {
+            const workspace = await this.findWorkspaceFolder(link.commit)
+            if (workspace) {
+                const linkUri = vscode.Uri.joinPath(workspace.uri, link.path)
+                const gitExtensionUri = api?.toGitUri(linkUri, link.commit)
+                return gitExtensionUri
             }
         }
         return
